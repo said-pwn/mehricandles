@@ -9,6 +9,7 @@ import Catalog from "./Pages/Catalog";
 import { LanguageProvider } from "./context/LanguageContext";
 import Cart from "./Pages/Cart";
 import Footer from "./components/Footer";
+import SendForm from "./Pages/SendForm";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Router>
         <div className="min-h-screen bg-white text-gray-800">
           <Navbar />
+          <Cart/>
           <Routes>
             <Route path="/" element={<Hero />} />
            
@@ -26,7 +28,7 @@ function App() {
           </Routes>
         </div>
       </Router>
-      <Cart/>
+      <SendForm/>
       <Footer/>
     </LanguageProvider>
   );
