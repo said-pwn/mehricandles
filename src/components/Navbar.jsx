@@ -95,7 +95,7 @@ const Navbar = () => {
             <LanguageDropdown />
           </div>
           
-                  {/* Instagram */}
+                 
                   <a
                     href='https://www.instagram.com/mehricandles/'
                     target='_blank'
@@ -104,7 +104,7 @@ const Navbar = () => {
                     <FaInstagram className='text-pink-500 hover:text-pink-600 transition duration-300' size={35} />
                   </a>
           
-                  {/* Telegram */}
+               
                   <a
                     href='https://t.me/mehricandles' // <-- сюда вставь реальную ссылку на свой телеграм
                     target='_blank'
