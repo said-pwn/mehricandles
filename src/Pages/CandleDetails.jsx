@@ -109,7 +109,7 @@ theme: "colored",
                 {product.name}
               </h1>
               <p className="mt-4 text-2xl text-gray-900">
-                {product.price.toLocaleString("ru-RU")} сум
+                 {texts.count}
               </p>
 
               <div className="mt-10 flex flex-col gap-4">
