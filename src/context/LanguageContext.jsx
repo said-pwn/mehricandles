@@ -32,7 +32,7 @@ const translations = {
     shopcollection: "Наш каталог",
     learnourstory: "О нас",
     who: "Кто мы", 
-    
+    must: "* — Обязательный пункт заполнения",
   },
   UZ: {
     category: "Katalog",
@@ -63,6 +63,7 @@ const translations = {
     shopcollection: "Katalogimiz",
     learnourstory: "Bizni haqimizda",
     who: "Biz kimmiz",
+    must: "* — Majburiy to'ldirish maydoni",
   },
   EN: {
     category: "Catalog",
@@ -93,6 +94,7 @@ const translations = {
     shopcollection: "Our catalog",
     learnourstory: "About us",
     who: "Who we are",
+    must: "* — Required field",
     
   },
  
