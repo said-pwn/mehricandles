@@ -21,7 +21,7 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" />
       </div>
 
-      {/* 📜 Правая часть — текст */}
+    
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center md:items-start text-center md:text-left bg-gradient-to-br from-black via-stone-900 to-black px-6 md:px-12 lg:px-20 py-16">
         <div className="h-1 w-16 bg-amber-900 rounded-full mb-6 mx-auto md:mx-0" />
 
@@ -85,7 +85,7 @@ export default function HeroSection() {
       </div>
       
       {/* Featured Products Section */}
-      <FeaturedProducts />
+      
     </section>
   );
 }

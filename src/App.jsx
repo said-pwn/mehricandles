@@ -21,6 +21,8 @@ import Customers from "./Pages/admin/Customers";
 import Settings from "./Pages/admin/Settings";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Dev from "./Pages/admin/Dev";
+import FeaturedProducts from "./components/FeaturedProducts";
 
 function App() {
   return (
@@ -42,6 +44,7 @@ function App() {
                     <Route path="/checkout" element={<SendForm />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
+                  <FeaturedProducts/>
                 </div>
                 <Footer />
               </div>
@@ -64,6 +67,7 @@ function App() {
             <Route path="orders" element={<Orders />} />
             <Route path="customers" element={<Customers />} />
             <Route path="settings" element={<Settings />} />
+            <Route path="dev" element={<Dev />} />
             <Route path="" element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />
           </Route>
