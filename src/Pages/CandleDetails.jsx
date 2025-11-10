@@ -1,40 +1,71 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { LanguageContext } from "../context/LanguageContext";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect, useCallback } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { GiCandleHolder, GiCandleLight } from "react-icons/gi";
-import { MdLocalFireDepartment } from "react-icons/md";
-// import { FaCandle } from "react-icons/fa6"; // просто замена FaCandles
+import { GiCandleLight } from "react-icons/gi";
+import apiService from "../services/api";
+import { products as defaultProducts } from "../data/products";
 
 export default function CandleDetails() {
-  const location = useLocation();
+  const { id } = useParams();
   const { texts } = useContext(LanguageContext);
   const [added, setAdded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const product = {
-    id: 101,
-    name: "Candle 1",
-    price: 10000,
-    href: "#",
-    color: "White",
-    quantity: 1,
-    imageSrc: "https://i.ibb.co/bfhswYk/IMG-5487.jpg",
-    imageAlt: "Model wearing plain white basic tee.",
-    description:
-      "The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options.",
-    highlights: [
-      "Hand cut and sewn locally",
-      "Dyed with our proprietary colors",
-      "Pre-washed & pre-shrunk",
-      "Ultra-soft 100% cotton",
-    ],
-    details:
-      "The 6-Pack includes two black, two white, and two heather gray Basic Tees.",
-  };
+  const loadProduct = useCallback(async () => {
+    try {
+      const productId = typeof id === 'string' ? parseInt(id) : id;
+      const data = await apiService.getProduct(productId);
+      if (data) {
+        setProduct(data);
+      } else {
+        // Fallback на дефолтные продукты
+        const defaultProduct = defaultProducts.find(p => {
+          const pId = typeof p.id === 'string' ? parseInt(p.id) : p.id;
+          return pId === productId;
+        }) || defaultProducts[0];
+        setProduct(defaultProduct);
+      }
+    } catch (error) {
+      console.error("Ошибка загрузки товара:", error);
+      const productId = typeof id === 'string' ? parseInt(id) : id;
+      const defaultProduct = defaultProducts.find(p => {
+        const pId = typeof p.id === 'string' ? parseInt(p.id) : p.id;
+        return pId === productId;
+      }) || defaultProducts[0];
+      setProduct(defaultProduct);
+    } finally {
+      setLoading(false);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    loadProduct();
+  }, [loadProduct]);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  if (loading || !product) {
+    return <div className="text-center py-12">Загрузка...</div>;
+  }
 
   // ✅ Добавляем товар в корзину
   const handleAddToCart = () => {
+    if (!product || !product.id) {
+      toast.error("Ошибка: товар не найден");
+      return;
+    }
+
     const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
     const existing = savedCart.find((item) => item.id === product.id);
 
@@ -42,7 +73,7 @@ export default function CandleDetails() {
     if (existing) {
       updatedCart = savedCart.map((item) =>
         item.id === product.id
-          ? { ...item, quantity: item.quantity + 1 }
+          ? { ...item, quantity: (item.quantity || 1) + 1 }
           : item
       );
     } else {
@@ -52,8 +83,6 @@ export default function CandleDetails() {
     // ✅ сохраняем в localStorage
     localStorage.setItem("cart", JSON.stringify(updatedCart));
     setAdded(true);
-
-const isMobile = window.innerWidth < 640;
 
     // ✅ показываем тост с иконкой
     toast.success(
@@ -79,7 +108,7 @@ theme: "colored",
       }
     );
 
-    // ✅ Отправляем ивент для обновления Cart
+    // ✅ Отправляем ивент для обновления Cart и Navbar
     window.dispatchEvent(new CustomEvent("cartUpdated", { detail: updatedCart }));
 
     // убираем "Добавлено!" через 2 сек
@@ -94,23 +123,92 @@ theme: "colored",
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Фото */}
             <div className="flex justify-center items-start">
-              <div className="aspect-[4/3] w-full max-w-md overflow-hidden rounded-2xl shadow-md">
-                <img
-                  alt={product.imageAlt}
-                  src={product.imageSrc}
-                  className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                />
+              <div className="aspect-[4/3] w-full max-w-md overflow-hidden rounded-2xl shadow-md bg-gray-100">
+                {product.imageSrc ? (
+                  <img
+                    alt={product.imageAlt || product.name || "Товар"}
+                    src={product.imageSrc}
+                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                  />
+                ) : (
+                  <div className="h-full w-full flex items-center justify-center text-gray-400">
+                    <span>Нет изображения</span>
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Инфо */}
             <div>
               <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-                {product.name}
+                {product.name || "Товар"}
               </h1>
-              <p className="mt-4 text-2xl text-gray-900">
-                 {texts.count}
-              </p>
+              {product.price && (
+                <p className="mt-4 text-2xl text-gray-900">
+                  {product.price.toLocaleString("ru-RU", { useGrouping: true })} {texts.count}
+                </p>
+              )}
+
+              {/* Product Details */}
+              <div className="mt-6 space-y-2">
+                {product.category && (
+                  <p className="text-sm text-gray-600">
+                    <span className="font-semibold">Категория:</span> {product.category}
+                  </p>
+                )}
+                {product.aroma && (
+                  <p className="text-sm text-gray-600">
+                    <span className="font-semibold">Аромат:</span> {product.aroma}
+                  </p>
+                )}
+                {product.burnTime && (
+                  <p className="text-sm text-gray-600">
+                    <span className="font-semibold">Время горения:</span> {product.burnTime}
+                  </p>
+                )}
+                {product.waxComposition && (
+                  <p className="text-sm text-gray-600">
+                    <span className="font-semibold">Состав воска:</span> {product.waxComposition}
+                  </p>
+                )}
+                {product.cottonWick && (
+                  <p className="text-sm text-green-600 font-semibold">✓ Фитиль из хлопка</p>
+                )}
+                {product.size && (
+                  <p className="text-sm text-gray-600">
+                    <span className="font-semibold">Размер:</span> {product.size}
+                  </p>
+                )}
+                {product.color && (
+                  <p className="text-sm text-gray-600">
+                    <span className="font-semibold">Цвет:</span> {product.color}
+                  </p>
+                )}
+                {product.shape && (
+                  <p className="text-sm text-gray-600">
+                    <span className="font-semibold">Форма:</span> {product.shape}
+                  </p>
+                )}
+              </div>
+
+              {/* Badges */}
+              <div className="mt-4 flex flex-wrap gap-2">
+                {product.isBestseller && (
+                  <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                    🔥 Хит продаж
+                  </span>
+                )}
+                {product.isNew && (
+                  <span className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                    ✨ Новинка
+                  </span>
+                )}
+                {product.isOnSale && (
+                  <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                    ⭐ Акция
+                  </span>
+                )}
+              </div>
 
               <div className="mt-10 flex flex-col gap-4">
                 <button
@@ -139,26 +237,32 @@ theme: "colored",
 
           {/* Описание */}
           <div className="mt-16 max-w-3xl">
-            <p className="text-base text-gray-900">{product.description}</p>
+            {product.description && (
+              <p className="text-base text-gray-900">{product.description}</p>
+            )}
 
-            <div className="mt-10">
-              <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
-              <ul
-                role="list"
-                className="list-disc space-y-2 pl-4 text-sm text-gray-600 mt-4"
-              >
-                {product.highlights.map((highlight) => (
-                  <li key={highlight}>{highlight}</li>
-                ))}
-              </ul>
-            </div>
+            {product.highlights && product.highlights.length > 0 && (
+              <div className="mt-10">
+                <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
+                <ul
+                  role="list"
+                  className="list-disc space-y-2 pl-4 text-sm text-gray-600 mt-4"
+                >
+                  {product.highlights.map((highlight, index) => (
+                    <li key={index}>{highlight}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-            <div className="mt-10">
-              <h2 className="text-sm font-medium text-gray-900">Details</h2>
-              <p className="mt-4 mb-10 text-sm text-gray-600">
-                {product.details}
-              </p>
-            </div>
+            {product.details && (
+              <div className="mt-10">
+                <h2 className="text-sm font-medium text-gray-900">Details</h2>
+                <p className="mt-4 mb-10 text-sm text-gray-600">
+                  {product.details}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

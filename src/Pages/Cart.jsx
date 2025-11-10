@@ -6,12 +6,11 @@ DialogPanel,
 DialogTitle,
 } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { LanguageContext } from "../context/LanguageContext";
 import { FaPlus, FaMinus } from "react-icons/fa";
 
 export default function Cart({ open, setOpen }) {
-const location = useLocation();
 const { texts } = useContext(LanguageContext);
 
 const [products, setProducts] = useState(() => {
@@ -25,22 +24,32 @@ return [];
 
 if (typeof open !== "boolean") return null;
 
+// Слушаем обновления корзины из других компонентов
 useEffect(() => {
 const handleCartUpdate = (e) => {
 setProducts(e.detail);
+localStorage.setItem("cart", JSON.stringify(e.detail));
 };
 window.addEventListener("cartUpdated", handleCartUpdate);
-localStorage.setItem("cart", JSON.stringify(products));
 return () => window.removeEventListener("cartUpdated", handleCartUpdate);
+}, []);
+
+// Сохраняем корзину в localStorage при изменении (только когда изменяется через UI корзины)
+useEffect(() => {
+if (products.length > 0 || localStorage.getItem("cart")) {
+localStorage.setItem("cart", JSON.stringify(products));
+}
 }, [products]);
 
 const handleRemove = (id) => {
-setProducts((prev) => prev.filter((item) => item.id !== id));
+const updated = products.filter((item) => item.id !== id);
+setProducts(updated);
+localStorage.setItem("cart", JSON.stringify(updated));
+window.dispatchEvent(new CustomEvent("cartUpdated", { detail: updated }));
 };
 
 const handleQuantityChange = (id, type) => {
-setProducts((prev) =>
-prev.map((item) => {
+const updated = products.map((item) => {
 if (item.id === id) {
 const newQuantity =
 type === "increase"
@@ -49,8 +58,10 @@ type === "increase"
 return { ...item, quantity: newQuantity };
 }
 return item;
-})
-);
+});
+setProducts(updated);
+localStorage.setItem("cart", JSON.stringify(updated));
+window.dispatchEvent(new CustomEvent("cartUpdated", { detail: updated }));
 };
 
 const total = products.reduce(
@@ -71,7 +82,7 @@ return ( <div> <Dialog open={open} onClose={setOpen} className="relative z-10"> 
             <div className="flex h-full flex-col overflow-y-auto bg-white shadow-xl rounded-l-2xl">
               <div className="flex items-start justify-between px-6 py-4 border-b border-gray-200">
                 <DialogTitle className="text-lg font-semibold text-gray-900">
-                  {texts.shoppingCart}
+                  {texts.cart}
                 </DialogTitle>
                 <button
                   onClick={() => setOpen(false)}
@@ -163,12 +174,13 @@ return ( <div> <Dialog open={open} onClose={setOpen} className="relative z-10"> 
                     {texts.shipping || "Доставка рассчитывается при оплате"}
                   </p>
                   <div className="mt-5">
-                    <a
-                      href="#"
+                    <Link
+                      to="/checkout"
+                      onClick={() => setOpen(false)}
                       className="flex items-center justify-center rounded-md bg-indigo-600 px-6 py-3 text-base font-medium text-white hover:bg-indigo-700 shadow transition"
                     >
                       {texts.checkout || "Оформить заказ"}
-                    </a>
+                    </Link>
                   </div>
                   <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                     <p>

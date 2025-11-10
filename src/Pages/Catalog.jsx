@@ -1,37 +1,314 @@
-// src/components/ProductList.jsx
-import { Link } from "react-router-dom";
+// src/Pages/Catalog.jsx
+import { Link, useSearchParams } from "react-router-dom";
+import { useContext, useState, useEffect } from "react";
+import { Search, Filter, SortAsc, SortDesc, X, Star, Sparkles, Flame } from "lucide-react";
+import { LanguageContext } from "../context/LanguageContext";
+import apiService from "../services/api";
+import { products as defaultProducts } from "../data/products";
 
-const products = [
-  { id: 1, name: "Earthen Bottle", price: "$48", imageSrc: "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-04-image-card-01.jpg", imageAlt: "Tall slender porcelain bottle." },
-  { id: 2, name: "Nomad Tumbler", price: "$35", imageSrc: "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-04-image-card-02.jpg", imageAlt: "Olive drab green insulated bottle." },
-  { id: 3, name: "Focus Paper Refill", price: "$89", imageSrc: "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-04-image-card-03.jpg", imageAlt: "Person using a pen." },
-  { id: 4, name: "Machined Mechanical Pencil", price: "$35", imageSrc: "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-04-image-card-04.jpg", imageAlt: "Black machined pencil." },
-];
+export default function Catalog() {
+  const { texts } = useContext(LanguageContext);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "");
+  const [selectedCategory, setSelectedCategory] = useState(searchParams.get("category") || "all");
+  const [sortBy, setSortBy] = useState(searchParams.get("sort") || "default");
+  const [showFilters, setShowFilters] = useState(false);
 
-export default function ProductList() {
-  return (
-    <div className="bg-white">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-8">Our Products</h2>
-        <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-          {products.map((product) => (
-            <Link
-              key={product.id}
-              to={`/product/${product.id}`}
-              className="group"
-            >
-              <img
-                alt={product.imageAlt}
-                src={product.imageSrc}
-                className="aspect-square w-full rounded-lg bg-gray-200 object-cover group-hover:opacity-75 transition"
-              />
-              <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
-              <p className="mt-1 text-lg font-medium text-gray-900">
-                {product.price}
-              </p>
-            </Link>
-          ))}
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    // Обновляем URL при изменении фильтров
+    const params = new URLSearchParams();
+    if (searchTerm) params.set("search", searchTerm);
+    if (selectedCategory !== "all") params.set("category", selectedCategory);
+    if (sortBy !== "default") params.set("sort", sortBy);
+    setSearchParams(params);
+  }, [searchTerm, selectedCategory, sortBy]);
+
+  const loadData = async () => {
+    try {
+      const [productsData, categoriesData] = await Promise.all([
+        apiService.getProducts(),
+        apiService.getCategories(),
+      ]);
+      
+      if (productsData.length === 0) {
+        const createdProducts = [];
+        for (const product of defaultProducts) {
+          const created = await apiService.createProduct(product);
+          createdProducts.push(created);
+        }
+        setProducts(createdProducts);
+      } else {
+        setProducts(productsData);
+      }
+      setCategories(categoriesData || []);
+    } catch (error) {
+      console.error("Ошибка загрузки данных:", error);
+      setProducts(defaultProducts);
+      setCategories([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const formatPrice = (price) => {
+    if (!price) return "0";
+    return price.toLocaleString("ru-RU", { useGrouping: true });
+  };
+
+  // Фильтрация и сортировка
+  let filteredProducts = products.filter((product) => {
+    const matchesSearch = !searchTerm || 
+      product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.aroma?.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesCategory = selectedCategory === "all" || 
+      product.category === selectedCategory ||
+      (selectedCategory === "bestseller" && product.isBestseller) ||
+      (selectedCategory === "new" && product.isNew) ||
+      (selectedCategory === "sale" && product.isOnSale);
+    
+    return matchesSearch && matchesCategory;
+  });
+
+  // Сортировка
+  if (sortBy === "price-asc") {
+    filteredProducts = [...filteredProducts].sort((a, b) => (a.price || 0) - (b.price || 0));
+  } else if (sortBy === "price-desc") {
+    filteredProducts = [...filteredProducts].sort((a, b) => (b.price || 0) - (a.price || 0));
+  } else if (sortBy === "name-asc") {
+    filteredProducts = [...filteredProducts].sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+  } else if (sortBy === "newest") {
+    filteredProducts = [...filteredProducts].sort((a, b) => {
+      const dateA = new Date(a.createdAt || 0);
+      const dateB = new Date(b.createdAt || 0);
+      return dateB - dateA;
+    });
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Загрузка каталога...</p>
         </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-gray-50 min-h-screen pb-20">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">{texts.catalog || "Каталог"}</h1>
+          <p className="text-gray-600">Найдите идеальную свечу для вашего дома</p>
+        </div>
+
+        {/* Search and Filters */}
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+          <div className="flex flex-col lg:flex-row gap-4">
+            {/* Search */}
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                placeholder="Поиск по названию, описанию, аромату..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              />
+            </div>
+
+            {/* Sort */}
+            <div className="flex gap-2">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              >
+                <option value="default">По умолчанию</option>
+                <option value="price-asc">Цена: по возрастанию</option>
+                <option value="price-desc">Цена: по убыванию</option>
+                <option value="name-asc">По названию (А-Я)</option>
+                <option value="newest">Сначала новые</option>
+              </select>
+              
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="flex items-center gap-2 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <Filter size={20} />
+                Фильтры
+              </button>
+            </div>
+          </div>
+
+          {/* Category Filters */}
+          {showFilters && (
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => setSelectedCategory("all")}
+                  className={`px-4 py-2 rounded-lg transition-colors ${
+                    selectedCategory === "all"
+                      ? "bg-indigo-600 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  Все товары
+                </button>
+                <button
+                  onClick={() => setSelectedCategory("bestseller")}
+                  className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
+                    selectedCategory === "bestseller"
+                      ? "bg-red-500 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  <Flame size={16} />
+                  Хит продаж
+                </button>
+                <button
+                  onClick={() => setSelectedCategory("new")}
+                  className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
+                    selectedCategory === "new"
+                      ? "bg-green-500 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  <Sparkles size={16} />
+                  Новинки
+                </button>
+                <button
+                  onClick={() => setSelectedCategory("sale")}
+                  className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
+                    selectedCategory === "sale"
+                      ? "bg-orange-500 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  <Star size={16} />
+                  Акции
+                </button>
+                {categories.map((category) => (
+                  <button
+                    key={category.id}
+                    onClick={() => setSelectedCategory(category.name)}
+                    className={`px-4 py-2 rounded-lg transition-colors ${
+                      selectedCategory === category.name
+                        ? "bg-indigo-600 text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    {category.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Results Count */}
+        <div className="mb-4 text-sm text-gray-600">
+          Найдено товаров: {filteredProducts.length}
+        </div>
+
+        {/* Products Grid */}
+        {filteredProducts.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {filteredProducts.map((product) => (
+              <Link
+                key={product.id}
+                to={`/product/${product.id}`}
+                className="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              >
+                <div className="aspect-square w-full bg-gray-100 relative overflow-hidden">
+                  {product.imageSrc ? (
+                    <img
+                      alt={product.imageAlt || product.name}
+                      src={product.imageSrc}
+                      className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center text-gray-400">
+                      <span>Нет изображения</span>
+                    </div>
+                  )}
+                  
+                  {/* Badges */}
+                  <div className="absolute top-2 left-2 flex flex-col gap-2">
+                    {product.isBestseller && (
+                      <span className="bg-red-500 text-white px-2 py-1 rounded text-xs font-bold shadow-lg">
+                        <Flame size={12} className="inline mr-1" />
+                        Хит
+                      </span>
+                    )}
+                    {product.isNew && (
+                      <span className="bg-green-500 text-white px-2 py-1 rounded text-xs font-bold shadow-lg">
+                        <Sparkles size={12} className="inline mr-1" />
+                        Новинка
+                      </span>
+                    )}
+                  </div>
+                  {product.isOnSale && (
+                    <span className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-bold shadow-lg">
+                      <Star size={12} className="inline mr-1" />
+                      Акция
+                    </span>
+                  )}
+                </div>
+                
+                <div className="p-4">
+                  <h3 className="font-bold text-lg text-gray-900 mb-1 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                    {product.name || "Товар"}
+                  </h3>
+                  
+                  {product.category && (
+                    <p className="text-xs text-indigo-600 mb-2">{product.category}</p>
+                  )}
+                  
+                  {product.aroma && (
+                    <p className="text-sm text-gray-600 mb-2">Аромат: {product.aroma}</p>
+                  )}
+                  
+                  <div className="flex items-center justify-between mt-3">
+                    <p className="text-xl font-bold text-gray-900">
+                      {formatPrice(product.price)} {texts.count}
+                    </p>
+                    {product.burnTime && (
+                      <p className="text-xs text-gray-500">⏱ {product.burnTime}</p>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16 bg-white rounded-xl shadow-lg">
+            <Search className="mx-auto text-gray-400 mb-4" size={48} />
+            <p className="text-gray-600 text-lg mb-2">Товары не найдены</p>
+            <p className="text-gray-500 text-sm">Попробуйте изменить параметры поиска или фильтры</p>
+            <button
+              onClick={() => {
+                setSearchTerm("");
+                setSelectedCategory("all");
+                setSortBy("default");
+              }}
+              className="mt-4 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+            >
+              Сбросить фильтры
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,22 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Home, Globe, Menu, X } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Home, Globe, Menu, X, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-FaCar,
 FaInstagram,
-FaMotorcycle,
 FaTelegram,
 FaShoppingCart,
 } from "react-icons/fa";
-import { MdArticle } from "react-icons/md";
-import {
-AiOutlineTool,
-AiOutlineFire,
-AiOutlineSetting,
-} from "react-icons/ai";
-import { FiTruck } from "react-icons/fi";
-import { IoCarSportOutline } from "react-icons/io5";
 import { BiCategory } from "react-icons/bi";
 import { LanguageContext } from "../context/LanguageContext";
 import Cart from "../Pages/Cart";
@@ -25,9 +15,12 @@ const Navbar = () => {
 const { language, texts, changeLanguage } = useContext(LanguageContext);
 const [languageOpen, setLanguageOpen] = useState(false);
 const [menuOpen, setMenuOpen] = useState(false);
-const [cartOpen, setCartOpen] = useState(false); // ✅ добавлено состояние корзины
-const [cartCount, setCartCount] = useState("");
+const [cartOpen, setCartOpen] = useState(false);
+const [cartCount, setCartCount] = useState(0);
+const [searchTerm, setSearchTerm] = useState("");
+const [showSearch, setShowSearch] = useState(false);
 const location = useLocation();
+const navigate = useNavigate();
 
 useEffect(() => {
 const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -40,14 +33,8 @@ return () => window.removeEventListener("cartUpdated", handleCartUpdate);
 }, []);
 
 const links = [
-{ to: "/", label: texts.cars, icon: <FaCar className="text-blue-500 text-2xl" /> },
-{ to: "/parts", label: texts.parts, icon: <AiOutlineSetting className="text-blue-500 text-2xl" /> },
-{ to: "/repair", label: texts.repair, icon: <AiOutlineTool className="text-blue-500 text-2xl" /> },
-{ to: "/commercial", label: texts.commercial, icon: <FiTruck className="text-blue-500 text-2xl" /> },
-{ to: "/read", label: texts.read, icon: <MdArticle className="text-blue-500 text-2xl" /> },
-{ to: "/hot-offers", label: texts.hotOffers, icon: <AiOutlineFire className="text-blue-500 text-2xl" /> },
-{ to: "/easy", label: texts.legkovye, icon: <IoCarSportOutline className="text-blue-500 text-2xl" /> },
-{ to: "/moto", label: texts.mototechnika, icon: <FaMotorcycle className="text-blue-500 text-2xl" /> },
+{ to: "/", label: texts.main, icon: <Home className="text-blue-500 text-2xl" /> },
+{ to: "/catalog", label: texts.category, icon: <BiCategory className="text-blue-500 text-2xl" /> },
 ];
 
 useEffect(() => {
@@ -93,11 +80,61 @@ onClick={() => setLanguageOpen(!languageOpen)}
 
 return (
 <>
-{/* Верхний навбар */} <nav className="hidden md:flex bg-white border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-4"> <div className="max-w-7xl mx-auto flex items-center justify-between w-full"> <Link to="/" className="relative text-xl lg:text-2xl font-bold">
+{/* Верхний навбар */} <nav className="hidden md:flex  bg-gray-300 px-4  sm:px-6 lg:px-8 py-4"> <div className="max-w-7xl mx-auto flex items-center justify-between w-full"> <Link to="/" className="relative text-xl lg:text-2xl font-bold text-black/70">
 MehriCandles.uz </Link>
 
+<Link
+                to="/catalog"
+                className="flex items-center gap-2  px-3 py-1 border-gray-300  hover:text-blue-500 transition text-sm lg:text-base ml-210"
+              >
+                <BiCategory size={30} />
+               
+              </Link>
 
       <div className="ml-auto flex gap-4 items-center">
+        {/* Search */}
+        <div className="hidden md:block relative">
+          {showSearch ? (
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <input
+                  type="text"
+                  placeholder="Поиск товаров..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter" && searchTerm.trim()) {
+                      navigate(`/catalog?search=${encodeURIComponent(searchTerm)}`);
+                      setShowSearch(false);
+                      setSearchTerm("");
+                    }
+                  }}
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent w-64"
+                  autoFocus
+                />
+              </div>
+              <button
+                onClick={() => {
+                  setShowSearch(false);
+                  setSearchTerm("");
+                }}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X size={20} />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowSearch(true)}
+              className="p-2 text-gray-600 hover:text-indigo-600 transition-colors"
+              title="Поиск"
+            >
+              <Search size={22} />
+            </button>
+          )}
+        </div>
+
         <LanguageDropdown />
 
         <a
@@ -107,7 +144,7 @@ MehriCandles.uz </Link>
         >
           <FaInstagram
             className="text-pink-500 hover:text-pink-600 transition duration-300"
-            size={35}
+            size={35} 
           />
         </a>
 
@@ -122,19 +159,25 @@ MehriCandles.uz </Link>
           />
         </a>
 
+         
+        
+
         {/* 🛒 Кнопка корзины */}
         <button
           onClick={() => setCartOpen(true)}
-          className="relative flex items-center justify-center"
+          className="relative flex items-center justify-center cursor-pointer"
         >
+        
           <FaShoppingCart
             className="text-gray-700 hover:text-blue-500 transition duration-300"
-            size={28}
+            size={28} 
           />
+          
           {cartCount > 0 && (
             <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
               {cartCount}
             </span>
+            
           )}
         </button>
       </div>
