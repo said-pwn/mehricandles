@@ -10,6 +10,7 @@ FaShoppingCart,
 import { BiCategory } from "react-icons/bi";
 import { LanguageContext } from "../context/LanguageContext";
 import Cart from "../Pages/Cart";
+import FeaturedProducts from "./FeaturedProducts";
 
 const Navbar = () => {
 const { language, texts, changeLanguage } = useContext(LanguageContext);
@@ -260,6 +261,7 @@ MehriCandles.uz </Link>
       </>
     )}
   </AnimatePresence>
+  {/* <FeaturedProducts/> */}
 
   {/* Нижнее меню для мобильных */}
   <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-md flex justify-around items-center py-2 md:hidden z-40">
@@ -295,6 +297,7 @@ MehriCandles.uz </Link>
         <Globe size={22} />
         <span className="text-xs">{language}</span>
       </button>
+      
 
       {languageOpen && (
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 w-24">
@@ -309,11 +312,13 @@ MehriCandles.uz </Link>
               {lang}
             </button>
           ))}
+          
         </div>
       )}
+      
     </div>
   </div>
-
+  
 
   <Cart open={cartOpen} setOpen={setCartOpen} />
 </>

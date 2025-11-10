@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import apiService from "../services/api";
+import { LanguageContext } from "../context/LanguageContext";
 
 export default function OrderForm() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function OrderForm() {
 
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { texts } = useContext(LanguageContext);
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -231,7 +233,7 @@ export default function OrderForm() {
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             ></textarea>
-            <p>* — Обязательный пункт заполнения</p>
+            <p>{texts.must}</p>
           </div>
 
           <button

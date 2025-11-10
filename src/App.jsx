@@ -44,7 +44,7 @@ function App() {
                     <Route path="/checkout" element={<SendForm />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
-                  <FeaturedProducts/>
+                  
                 </div>
                 <Footer />
               </div>
