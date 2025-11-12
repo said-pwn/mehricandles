@@ -245,6 +245,7 @@ ${order.comment ? `Комментарий: ${order.comment}` : ""}
       {filteredOrders.length === 0 && (
         <div className="text-center py-12 bg-white rounded-xl shadow-lg">
           <p className="text-gray-600">Заказы не найдены</p>
+          <p className="text-black">В данный момент заказы отправляются в тг бота</p>
         </div>
       )}
 

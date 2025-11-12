@@ -95,45 +95,7 @@ MehriCandles.uz </Link>
       <div className="ml-auto flex gap-4 items-center">
         {/* Search */}
         <div className="hidden md:block relative">
-          {showSearch ? (
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                <input
-                  type="text"
-                  placeholder="Поиск товаров..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter" && searchTerm.trim()) {
-                      navigate(`/catalog?search=${encodeURIComponent(searchTerm)}`);
-                      setShowSearch(false);
-                      setSearchTerm("");
-                    }
-                  }}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent w-64"
-                  autoFocus
-                />
-              </div>
-              <button
-                onClick={() => {
-                  setShowSearch(false);
-                  setSearchTerm("");
-                }}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X size={20} />
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => setShowSearch(true)}
-              className="p-2 text-gray-600 hover:text-indigo-600 transition-colors"
-              title="Поиск"
-            >
-              <Search size={22} />
-            </button>
-          )}
+         
         </div>
 
         <LanguageDropdown />
@@ -186,12 +148,12 @@ MehriCandles.uz </Link>
   </nav>
 
   {/* Мобильная шапка */}
-  <div className="md:hidden flex items-center justify-between pl-2 py-3 border-b border-gray-300">
+  <div className="md:hidden flex bg-gray-300 items-center justify-between pl-2 py-3 border-b border-gray-300">
     <button onClick={() => setMenuOpen(true)}>
       <Menu size={26} />
     </button>
 
-    <div className="flex pl-4 gap-2 items-center">
+    <div className="flex  pl-4 gap-2 items-center">
       <Link to="/" className="text-xl font-bold">
         MehriCandles.uz
       </Link>

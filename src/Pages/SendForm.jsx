@@ -4,6 +4,67 @@ import { toast } from "react-toastify";
 import apiService from "../services/api";
 import { LanguageContext } from "../context/LanguageContext";
 
+function SuccessModal({ open, order, onClose }) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
+        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white">
+          <h3 className="text-2xl font-bold">Заказ оформлен ✅</h3>
+          <p className="opacity-90 mt-1">Спасибо! Мы свяжемся с вами для подтверждения.</p>
+        </div>
+        <div className="p-6 space-y-4">
+          <div className="grid grid-cols-2 gap-3 text-sm">
+            <div>
+              <p className="text-gray-500">Имя</p>
+              <p className="font-semibold text-gray-900">{order?.firstName} {order?.lastName}</p>
+            </div>
+            <div>
+              <p className="text-gray-500">Телефон</p>
+              <p className="font-semibold text-gray-900">{order?.phone}</p>
+            </div>
+            <div>
+              <p className="text-gray-500">Доставка</p>
+              <p className="font-semibold text-gray-900">{order?.delivery || "—"}</p>
+            </div>
+            <div>
+              <p className="text-gray-500">Оплата</p>
+              <p className="font-semibold text-gray-900">{order?.payment || "—"}</p>
+            </div>
+          </div>
+
+          <div className="bg-gray-50 rounded-xl p-4">
+            <p className="font-semibold text-gray-900 mb-2">Состав заказа</p>
+            <div className="space-y-2 max-h-48 overflow-auto pr-1">
+              {order?.items?.map((it) => (
+                <div key={it.id} className="flex justify-between text-sm">
+                  <span className="text-gray-700">{it.name} × {it.quantity}</span>
+                  <span className="font-semibold">{(it.price * it.quantity).toLocaleString("ru-RU")} сум</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-between items-center pt-3 mt-3 border-t">
+              <span className="text-gray-600">Итого</span>
+              <span className="text-xl font-bold text-gray-900">{(order?.total || 0).toLocaleString("ru-RU")} сум</span>
+            </div>
+          </div>
+
+          {order?.comment && (
+            <div className="bg-white rounded-xl border p-4">
+              <p className="text-sm text-gray-500">Комментарий</p>
+              <p className="text-gray-900 mt-1">{order.comment}</p>
+            </div>
+          )}
+        </div>
+        <div className="p-6 pt-0 flex gap-3 justify-end">
+          <button onClick={onClose} className="px-5 py-2 rounded-lg border text-gray-700 hover:bg-gray-50">Закрыть</button>
+          <a href="/catalog" className="px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">В каталог</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function OrderForm() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -15,6 +76,8 @@ export default function OrderForm() {
     comment: "",
     date: "",
   });
+  const [successOpen, setSuccessOpen] = useState(false);
+const [lastOrder, setLastOrder] = useState(null);
 
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -56,11 +119,12 @@ export default function OrderForm() {
 
       // Отправляем в Telegram (если сервер доступен)
       try {
-        await fetch("http://localhost:5000/api/order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        });
+   await fetch("http://localhost:5000/api/order", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(order),
+});
+
       } catch (err) {
         console.log("Telegram отправка не удалась, но заказ сохранен");
       }
@@ -70,6 +134,9 @@ export default function OrderForm() {
       window.dispatchEvent(new CustomEvent("cartUpdated", { detail: [] }));
 
       toast.success("✅ Заказ успешно оформлен!");
+      setLastOrder(order);
+setSuccessOpen(true);
+
       
       setFormData({
         firstName: "",
@@ -81,9 +148,7 @@ export default function OrderForm() {
         date: "",
       });
 
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
+    
     } catch (error) {
       console.error("Ошибка:", error);
       toast.error("❌ Ошибка при оформлении заказа.");
@@ -190,7 +255,6 @@ export default function OrderForm() {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             >
               <option value="">Выберите способ</option>
-              <option>Самовывоз</option>
               <option>Курьером</option>
               <option>Почтой</option>
             </select>
@@ -206,8 +270,6 @@ export default function OrderForm() {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             >
               <option value="">Выберите способ</option>
-              <option>Наличными</option>
-              <option>Картой</option>
               <option>Перевод на карту</option>
             </select>
           </div>
@@ -249,6 +311,25 @@ export default function OrderForm() {
           </button>
         </form>
       </div>
+
+<SuccessModal
+  open={successOpen}
+  order={lastOrder || {}}
+  onClose={() => {
+    setSuccessOpen(false);
+    setLastOrder(null);
+    setFormData({
+      firstName: "",
+      lastName: "",
+      phone: "",
+      delivery: "",
+      payment: "",
+      comment: "",
+      date: "",
+    });
+    navigate("/");
+  }}
+/>
     </div>
   );
 }

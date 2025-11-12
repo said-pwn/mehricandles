@@ -4,7 +4,7 @@ import { useContext, useState, useEffect } from "react";
 import { Search, Filter, SortAsc, SortDesc, X, Star, Sparkles, Flame } from "lucide-react";
 import { LanguageContext } from "../context/LanguageContext";
 import apiService from "../services/api";
-import { products as defaultProducts } from "../data/products";
+// removed defaultProducts fallback to ensure site uses only API data
 
 export default function Catalog() {
   const { texts } = useContext(LanguageContext);
@@ -32,26 +32,23 @@ export default function Catalog() {
 
   const loadData = async () => {
     try {
-      const [productsData, categoriesData] = await Promise.all([
-        apiService.getProducts(),
-        apiService.getCategories(),
-      ]);
-      
-      if (productsData.length === 0) {
-        const createdProducts = [];
-        for (const product of defaultProducts) {
-          const created = await apiService.createProduct(product);
-          createdProducts.push(created);
-        }
-        setProducts(createdProducts);
-      } else {
-        setProducts(productsData);
+      // Load products first (critical path)
+      try {
+        const productsData = await apiService.getProducts();
+        setProducts(Array.isArray(productsData) ? productsData : []);
+      } catch (e) {
+        console.error("Ошибка загрузки товаров:", e);
+        setProducts([]);
       }
-      setCategories(categoriesData || []);
-    } catch (error) {
-      console.error("Ошибка загрузки данных:", error);
-      setProducts(defaultProducts);
-      setCategories([]);
+
+      // Load categories independently (non-blocking)
+      try {
+        const categoriesData = await apiService.getCategories();
+        setCategories(Array.isArray(categoriesData) ? categoriesData : []);
+      } catch (e) {
+        console.warn("Категории недоступны, продолжаем без них:", e);
+        setCategories([]);
+      }
     } finally {
       setLoading(false);
     }
@@ -98,7 +95,7 @@ export default function Catalog() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Загрузка каталога...</p>
+          <p className="text-gray-600">{texts.loadingCatalog}</p>
         </div>
       </div>
     );
@@ -133,13 +130,13 @@ export default function Catalog() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="px-6 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               >
-                <option value="default">По умолчанию</option>
-                <option value="price-asc">Цена: по возрастанию</option>
-                <option value="price-desc">Цена: по убыванию</option>
-                <option value="name-asc">По названию (А-Я)</option>
-                <option value="newest">Сначала новые</option>
+                <option value="default">{texts.poumolchaniyu}</option>
+                <option value="price-asc">{texts.sortByPriceAsc}</option>
+                <option value="price-desc">{texts.sortByPriceDesc}</option>
+                <option value="name-asc">{texts.sortByNameAsc}</option>
+                <option value="newest">{texts.sortByNewest}</option>
               </select>
               
               <button
@@ -147,7 +144,7 @@ export default function Catalog() {
                 className="flex items-center gap-2 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 <Filter size={20} />
-                Фильтры
+                
               </button>
             </div>
           </div>
@@ -186,7 +183,7 @@ export default function Catalog() {
                   }`}
                 >
                   <Sparkles size={16} />
-                  Новинки
+                  {texts.new || "Новинки"}
                 </button>
                 <button
                   onClick={() => setSelectedCategory("sale")}
@@ -249,13 +246,13 @@ export default function Catalog() {
                     {product.isBestseller && (
                       <span className="bg-red-500 text-white px-2 py-1 rounded text-xs font-bold shadow-lg">
                         <Flame size={12} className="inline mr-1" />
-                        Хит
+                        {texts.hit2 || "Хит"}
                       </span>
                     )}
                     {product.isNew && (
                       <span className="bg-green-500 text-white px-2 py-1 rounded text-xs font-bold shadow-lg">
                         <Sparkles size={12} className="inline mr-1" />
-                        Новинка
+                        {texts.new2 || "Новинка"}
                       </span>
                     )}
                   </div>

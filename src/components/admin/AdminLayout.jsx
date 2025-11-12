@@ -29,9 +29,7 @@ export default function AdminLayout() {
     { path: "/admin/dashboard", icon: LayoutDashboard, label: "Статистика" },
     { path: "/admin/products", icon: Package, label: "Товары" },
     { path: "/admin/categories", icon: Tag, label: "Категории" },
-    { path: "/admin/orders", icon: ShoppingCart, label: "Заказы" },
-    { path: "/admin/customers", icon: Users, label: "Клиенты" },
-    { path: "/admin/settings", icon: Settings, label: "Настройки" },
+    { path: "/admin/orders", icon: ShoppingCart, label: "Заказы (Отключен)" },
     { path: "/admin/dev", icon: Settings, label: "for dev" },
   ];
 

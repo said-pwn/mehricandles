@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { GiCandleLight } from "react-icons/gi";
 import apiService from "../services/api";
 import { products as defaultProducts } from "../data/products";
+import { AlignLeft, StickyNote } from "lucide-react";
 
 export default function CandleDetails() {
   const { id } = useParams();
@@ -14,6 +15,7 @@ export default function CandleDetails() {
   const [isMobile, setIsMobile] = useState(false);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedType, setSelectedType] = useState("");
 
   const loadProduct = useCallback(async () => {
     try {
@@ -66,18 +68,26 @@ export default function CandleDetails() {
       return;
     }
 
+    // Если у товара есть набор типов, требуем выбор
+    if (Array.isArray(product.types) && product.types.length > 0 && !selectedType) {
+      toast.error("Пожалуйста, выберите тип товара");
+      return;
+    }
+
     const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const existing = savedCart.find((item) => item.id === product.id);
+    const existing = savedCart.find((item) => item.id === product.id && (!product.types || item.type === selectedType));
 
     let updatedCart;
     if (existing) {
       updatedCart = savedCart.map((item) =>
-        item.id === product.id
+        item.id === product.id && (!product.types || item.type === selectedType)
           ? { ...item, quantity: (item.quantity || 1) + 1 }
           : item
       );
     } else {
-      updatedCart = [...savedCart, { ...product, quantity: 1 }];
+      const cartItem = { ...product, quantity: 1 };
+      if (selectedType) cartItem.type = selectedType;
+      updatedCart = [...savedCart, cartItem];
     }
 
     // ✅ сохраняем в localStorage
@@ -210,7 +220,25 @@ theme: "colored",
                 )}
               </div>
 
-              <div className="mt-10 flex flex-col gap-4">
+              <div className="mt-8">
+                {Array.isArray(product.types) && product.types.length > 0 && (
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Выберите тип</label>
+                    <select
+                      value={selectedType}
+                      onChange={(e) => setSelectedType(e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    >
+                      <option value="">— Выберите —</option>
+                      {product.types.map((t, idx) => (
+                        <option key={idx} value={t}>{t}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-6 flex flex-col gap-4">
                 <button
                   type="button"
                   onClick={handleAddToCart}
@@ -223,8 +251,6 @@ theme: "colored",
                   {added ? texts.aded : texts.Add}
                 </button>
 
-                
-
                 <Link
                   to="/catalog"
                   className="text-center w-full rounded-md border border-indigo-600 px-8 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50"
@@ -235,11 +261,22 @@ theme: "colored",
             </div>
           </div>
 
-          {/* Описание */}
-          <div className="mt-16 max-w-3xl">
-            {product.description && (
-              <p className="text-base text-gray-900">{product.description}</p>
-            )}
+         
+ <div className="mt-10 mb-5 max-w-3xl">
+  {product.description && (
+    <div className="bg-gray-300 border border-gray-300  rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
+      <h3 className="flex items-center text-lg font-semibold text-black mb-3">
+       
+         <AlignLeft className="w-5 h-5 text-indigo-900 mr-2" />
+        Description
+      </h3>
+      <p className="text-black  leading-relaxed whitespace-pre-line">
+        {product.description}
+      </p>
+    </div>
+  )}
+
+
 
             {product.highlights && product.highlights.length > 0 && (
               <div className="mt-10">

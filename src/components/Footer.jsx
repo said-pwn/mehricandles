@@ -3,7 +3,7 @@ import { FaInstagram, FaTelegram } from 'react-icons/fa'
 
 const Footer = () => {
   return (
-    <div className='h-16 bg-gray-200 text-gray-600 flex items-center'>
+    <div className='h-16 mb-15 md:mb-0 bg-gray-200 text-gray-600 flex items-center'>
       <div className='ml-5 md:ml-20'>
         © 2025 MehriCandles
       </div>

@@ -165,14 +165,12 @@ return ( <div> <Dialog open={open} onClose={setOpen} className="relative z-10"> 
               </div>
 
               {products.length > 0 && (
-                <div className="border-t border-gray-200 px-6 py-4 bg-gray-50">
+                <div className="border-t mb-15 md:mb-0 border-gray-200 px-6 py-4 bg-gray-50">
                   <div className="flex justify-between text-base font-medium text-gray-900">
                     <p>{texts.total}</p>
                     <p>{formatPrice(total)} сум</p>
                   </div>
-                  <p className="mt-2 text-sm text-gray-500">
-                    {texts.shipping || "Доставка рассчитывается при оплате"}
-                  </p>
+                  
                   <div className="mt-5">
                     <Link
                       to="/checkout"
@@ -182,7 +180,7 @@ return ( <div> <Dialog open={open} onClose={setOpen} className="relative z-10"> 
                       {texts.checkout || "Оформить заказ"}
                     </Link>
                   </div>
-                  <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
+                  <div className="mt-6 flex  justify-center text-center text-sm text-gray-500">
                     <p>
                       {texts.or}{" "}
                       <button

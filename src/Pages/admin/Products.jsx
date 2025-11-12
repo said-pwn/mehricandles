@@ -34,6 +34,8 @@ export default function Products() {
     try {
       await apiService.deleteProduct(id);
       toast.success("Товар удален");
+      // уведомляем публичный сайт
+      window.dispatchEvent(new CustomEvent("dataChanged", { detail: { resource: "products", action: "delete", id } }));
       loadProducts();
     } catch (error) {
       toast.error("Ошибка при удалении товара");
@@ -167,7 +169,9 @@ export default function Products() {
           setEditingProduct(null);
         }}
         product={editingProduct}
-        onSave={() => {
+        onSave={(action = (editingProduct ? "update" : "create")) => {
+          // уведомляем публичный сайт
+          window.dispatchEvent(new CustomEvent("dataChanged", { detail: { resource: "products", action } }));
           loadProducts();
           setIsModalOpen(false);
           setEditingProduct(null);
