@@ -119,12 +119,14 @@ const [lastOrder, setLastOrder] = useState(null);
 
       // Отправляем в Telegram (если сервер доступен)
       try {
-   await fetch("http://localhost:5000/api/order", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(order),
-});
-
+        const serverUrl = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_SERVER)
+          ? import.meta.env.VITE_API_SERVER
+          : "http://localhost:5000/api/order";
+        await fetch(serverUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(order),
+        });
       } catch (err) {
         console.log("Telegram отправка не удалась, но заказ сохранен");
       }
