@@ -23,6 +23,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Dev from "./Pages/admin/Dev";
 import FeaturedProducts from "./components/FeaturedProducts";
+import SocialLinks from "./components/SocialLinks";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
                     <Route path="/checkout" element={<SendForm />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
+                  <SocialLinks/>
                   
                 </div>
                 <Footer />

@@ -4,15 +4,17 @@ import fetch from "node-fetch";
 
 const app = express();
 
-// 🧱 Middleware
+// Middleware
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173" }));
+// Allow all origins (Render/public), and handle preflight
+app.use(cors());
+app.options("*", cors());
 
-// ⚙️ Конфигурация Telegram
+// Конфигурация Telegram
 const BOT_TOKEN = "8278406628:AAEC8yF_ZRjSbEVNsz-1RDXejm-HxK-P0MY";
 const CHAT_ID = "1395598568";
 
-// 📩 POST маршрут для заказов
+// POST маршрут для заказов
 app.post("/api/order", async (req, res) => {
   try {
     const {
