@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { DollarSign, ShoppingCart, Package, Clock, TrendingUp, TrendingDown, Download, BarChart3 } from "lucide-react";
 import apiService from "../../services/api";
+import { Analytics } from "@vercel/analytics/react"
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
@@ -108,6 +109,7 @@ export default function Dashboard() {
                     >
                       {card.trend}
                     </span>
+                    <Analytics/>
                   </div>
                 </div>
                 <div className={`${card.color} p-3 rounded-lg`}>

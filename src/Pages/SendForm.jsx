@@ -121,7 +121,7 @@ const [lastOrder, setLastOrder] = useState(null);
       try {
         const serverUrl = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_SERVER)
           ? import.meta.env.VITE_API_SERVER
-          : "http://localhost:5000/api/order";
+          : "https://botttttew.onrender.com/api/order";
         await fetch(serverUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
