@@ -9,6 +9,7 @@ export default function HeroSection() {
   const { texts } = useContext(LanguageContext);
 
   return (
+<>
     <section className="relative min-h-screen w-full flex flex-col md:flex-row">
       {/* 🖼 Левая часть — фоновое изображение */}
       <div className="relative w-full md:w-1/2 h-[50vh] md:h-auto">
@@ -85,7 +86,9 @@ export default function HeroSection() {
       </div>
       
       {/* Featured Products Section */}
-      
+     
     </section>
+    <FeaturedProducts />
+</>
   );
 }

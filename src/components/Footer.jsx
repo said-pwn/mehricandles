@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { FaInstagram, FaTelegram } from 'react-icons/fa'
+import { LanguageContext } from '../context/LanguageContext';
 
 const Footer = () => {
+    const { texts } = useContext(LanguageContext);
   return (
-    <div className='h-16 mb-15 md:mb-0 bg-gray-200 text-gray-600 flex items-center'>
+    <div className='h-16 mb-15 md:mb-0 bg-gray-300 text-gray-600 flex items-center'>
       <div className='ml-5 md:ml-20'>
         © 2025 MehriCandles
       </div>

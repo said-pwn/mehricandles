@@ -55,6 +55,11 @@ const translations = {
   notFound: "Товары не найдены",
   tryChangeFilters: "Попробуйте изменить параметры поиска или фильтры",
   resetFilters: "Сбросить фильтры",
+  noimg: "Нет изображения",
+  allproduscts: "Все товары",
+  lookmore: "Смотреть весь каталог",
+  select: "Выберите из нашей коллекции лучших свечей",
+  popular: "Популярные товары",
   },
   UZ: {
     category: "Katalog",

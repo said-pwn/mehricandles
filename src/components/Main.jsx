@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { ShoppingCart, Heart, User, Menu, X, Search, Gift, Leaf, Clock } from 'lucide-react';
+import { LanguageContext } from '../context/LanguageContext';
 
 export default function CandleShop() {
   const [mobileOpen, setMobileOpen] = useState(false);
+    const { texts } = useContext(LanguageContext);
 
   return (
     <div className="font-sans text-gray-800">

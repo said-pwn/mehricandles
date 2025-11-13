@@ -6,6 +6,7 @@ import { LanguageContext } from "../context/LanguageContext";
 
 function SuccessModal({ open, order, onClose }) {
   if (!open) return null;
+    const { texts } = useContext(LanguageContext);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
@@ -97,67 +98,74 @@ const [lastOrder, setLastOrder] = useState(null);
     return cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+
+  try {
+    const total = calculateTotal();
+    const order = {
+      ...formData,
+      items: cartItems,
+      total,
+      status: "pending",
+      createdAt: new Date().toISOString(),
+    };
+
+    // Сохраняем локально
+    const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+    order.id = Date.now();
+    orders.push(order);
+    localStorage.setItem("orders", JSON.stringify(orders));
+
+    // === ОТПРАВКА В TELEGRAM ===
+    const serverUrl =
+      (typeof import.meta !== "undefined" &&
+        import.meta.env &&
+        import.meta.env.VITE_API_SERVER)
+        ? import.meta.env.VITE_API_SERVER
+        : "https://botttttew.onrender.com/api/order";
 
     try {
-      const total = calculateTotal();
-      const order = {
-        ...formData,
-        items: cartItems,
-        total,
-        status: "pending",
-        createdAt: new Date().toISOString(),
-      };
-
-      // Сохраняем заказ в localStorage/MockAPI
-      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-      order.id = Date.now();
-      orders.push(order);
-      localStorage.setItem("orders", JSON.stringify(orders));
-
-      // Отправляем в Telegram (если сервер доступен)
-      try {
-        const serverUrl = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_SERVER)
-          ? import.meta.env.VITE_API_SERVER
-          : "https://botttttew.onrender.com/api/order";
-        await fetch(serverUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(order),
-        });
-      } catch (err) {
-        console.log("Telegram отправка не удалась, но заказ сохранен");
-      }
-
-      // Очищаем корзину
-      localStorage.removeItem("cart");
-      window.dispatchEvent(new CustomEvent("cartUpdated", { detail: [] }));
-
-      toast.success("✅ Заказ успешно оформлен!");
-      setLastOrder(order);
-setSuccessOpen(true);
-
-      
-      setFormData({
-        firstName: "",
-        lastName: "",
-        phone: "",
-        delivery: "",
-        payment: "",
-        comment: "",
-        date: "",
+      const res = await fetch(serverUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order),
       });
 
-    
-    } catch (error) {
-      console.error("Ошибка:", error);
-      toast.error("❌ Ошибка при оформлении заказа.");
-    } finally {
-      setLoading(false);
+      if (!res.ok) {
+        throw new Error("Ошибка ответа сервера");
+      }
+    } catch (err) {
+      console.error("Ошибка отправки в Telegram:", err);
+      toast.error("❌ Не удалось отправить заказ в Telegram. Попробуйте позже.");
     }
-  };
+
+    // Очищаем корзину
+    localStorage.removeItem("cart");
+    window.dispatchEvent(new CustomEvent("cartUpdated", { detail: [] }));
+
+    toast.success("✅ Заказ успешно оформлен!");
+    setLastOrder(order);
+    setSuccessOpen(true);
+
+    setFormData({
+      firstName: "",
+      lastName: "",
+      phone: "",
+      delivery: "",
+      payment: "",
+      comment: "",
+      date: "",
+    });
+
+  } catch (error) {
+    console.error("Ошибка:", error);
+    toast.error("❌ Произошла ошибка при оформлении заказа.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   if (cartItems.length === 0) {
     return (

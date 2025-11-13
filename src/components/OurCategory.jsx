@@ -11,58 +11,13 @@ export default function FeaturedProducts() {
   const { texts } = useContext(LanguageContext);
 
 
-  
-  useEffect(() => {
-    loadProducts();
-  }, []);
 
-  const loadProducts = async () => {
-    try {
-      const data = await apiService.getProducts();
-      // Показываем хиты продаж, новинки или первые 4 товара
-      const featured = data
-        .filter(p => p.isBestseller || p.isNew || p.isOnSale)
-        .slice(0, 4);
-      
-      if (featured.length < 4) {
-        const additional = data
-          .filter(p => !featured.find(f => f.id === p.id))
-          .slice(0, 4 - featured.length);
-        setProducts([...featured, ...additional]);
-      } else {
-        setProducts(featured);
-      }
-    } catch (error) {
-      console.error("Ошибка загрузки товаров:", error);
-      setProducts([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const formatPrice = (price) => {
-    if (!price) return "0";
-    return price.toLocaleString("ru-RU", { useGrouping: true });
-  };
-
-  if (loading) {
-    return (
-      <div className="text-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
-      </div>
-    );
-  }
-
-  if (products.length === 0) {
-    return null;
-  }
 
   return (
     <section className="bg-gray-400 py-16 ">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">{texts.popular}</h2>
-          <p className="text-gray-600">{texts.select}</p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

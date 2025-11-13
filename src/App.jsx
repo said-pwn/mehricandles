@@ -28,6 +28,7 @@ import { Analytics } from "@vercel/analytics/react";
 
 function App() {
   return (
+    <div className="bg-gray-600">
     <LanguageProvider>
       <Router>
         <Routes>
@@ -45,7 +46,9 @@ function App() {
                     <Route path="/product/:id" element={<CandleDetails />} />
                     <Route path="/checkout" element={<SendForm />} />
                     <Route path="*" element={<NotFound />} />
+                    <Route path="/featured" element={<FeaturedProducts />} />
                   </Routes>
+                  
                   <SocialLinks/>
                   
                 </div>
@@ -79,7 +82,7 @@ function App() {
       </Router>
       <Analytics/>
     </LanguageProvider>
-    
+    </div>
   );
 }
 

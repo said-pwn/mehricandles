@@ -18,7 +18,7 @@ export default function SocialLinks() {
   ];
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+    <div className="flex flex-col bg-gray-400 sm:flex-row items-center justify-center gap-4 mt-8">
       {links.map((link) => (
         <a
           key={link.name}
