@@ -1,6 +1,6 @@
 // src/services/auth.js
-const ADMIN_USERNAME = "admin";
-const ADMIN_PASSWORD = "admin123"; // В продакшене используйте хеширование!
+const ADMIN_USERNAME = "mehricandlesShop";
+const ADMIN_PASSWORD = "0EMSQvbO8PY4i4gP"; // В продакшене используйте хеширование!
 
 class AuthService {
   login(username, password) {

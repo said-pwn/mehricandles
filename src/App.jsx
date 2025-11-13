@@ -24,6 +24,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Dev from "./Pages/admin/Dev";
 import FeaturedProducts from "./components/FeaturedProducts";
 import SocialLinks from "./components/SocialLinks";
+import { Analytics } from "@vercel/analytics/react";
 
 function App() {
   return (
@@ -76,7 +77,9 @@ function App() {
         </Routes>
         <ToastContainer position="top-right" autoClose={3000} />
       </Router>
+      <Analytics/>
     </LanguageProvider>
+    
   );
 }
 
