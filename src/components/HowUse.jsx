@@ -68,13 +68,13 @@ export default function SolidPerfumeTutorial() {
         <div className="lg:w-1/2 w-full flex justify-center relative">
           <div className="overflow-hidden rounded-3xl shadow-3xl border border-gray-200 h-[650px] w-[330px] lg:h-[750px] lg:w-[360px] relative bg-gray-100 flex items-center justify-center">
             <video
-  src="/fallback.mp4" // <- путь из public/videos/
+  src="/video.mp4" // <- путь из public/videos/
   className="h-full w-full object-cover rounded-3xl"
   autoPlay
   loop
   muted
   playsInline
-  poster="/videos/uzb.png"
+  poster="/photo.png"
 >
   {/* fallback для старых браузеров */}
   <p className="text-center text-gray-700 px-4">
@@ -84,7 +84,7 @@ export default function SolidPerfumeTutorial() {
               {/* fallback */}
               <div className="flex flex-col items-center justify-center text-center px-4">
                 <img
-                  src="../src/assets/uzb.png"
+                  src="/photo.png"
                   alt={texts.videoAlt}
                   className="rounded-3xl mb-4 shadow-lg"
                 />
