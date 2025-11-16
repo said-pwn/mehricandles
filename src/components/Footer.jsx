@@ -21,6 +21,7 @@ const Footer = () => {
           <Link to="/catalog" className="hover:text-indigo-600 transition duration-300 font-medium">{texts.category || "Каталог"}</Link>
           <Link to="/about" className="hover:text-indigo-600 transition duration-300 font-medium">{texts.learnourstory || "О нас"}</Link>
           <Link to="/contact" className="hover:text-indigo-600 transition duration-300 font-medium">{texts.contact || "Контакты"}</Link>
+          <a href="https://t.me/sddffhf1" className="underline text-blue-900">{texts.seeror}</a>
         </nav>
 
         {/* Right: social */}
@@ -64,6 +65,7 @@ const Footer = () => {
           >
             <FaTelegram className="text-blue-500 hover:text-blue-600" size={28} />
           </a>
+          
        
     
     </footer>

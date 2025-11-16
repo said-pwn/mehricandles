@@ -1,20 +1,22 @@
 // src/components/SocialLinks.jsx
 import { Instagram, Send } from "lucide-react";
+import { FaInstagram, FaTelegram, FaTelegramPlane } from "react-icons/fa";
 
 export default function SocialLinks() {
   const links = [
     {
       name: "Instagram",
-      url: "https://instagram.com/yourprofile",
-      icon: <Instagram size={24} />,
+      url: "https://instagram.com/mehricandles",
+      icon: <FaInstagram size={24} />,
       bg: "bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-500",
     },
     {
       name: "Telegram",
-      url: "https://t.me/yourprofile",
-      icon: <Send size={24} />,
+      url: "https://t.me/mehricandles",
+      icon: <FaTelegramPlane size={24} />,
       bg: "bg-blue-500",
     },
+    
   ];
 
   return (

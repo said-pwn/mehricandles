@@ -259,7 +259,7 @@ export default function Catalog() {
                   {product.isOnSale && (
                     <span className="absolute top-2 right-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-bold shadow-lg">
                       <Star size={12} className="inline mr-1" />
-                      Акция
+                      {texts.sale || "Распродажа"}
                     </span>
                   )}
                 </div>

@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import { LanguageContext } from "../context/LanguageContext";
 import FeaturedProducts from "./FeaturedProducts";
+import Blog from "./Blog";
+import HowUse from "./HowUse";
 
 export default function HeroSection() {
   const [isHovered, setIsHovered] = useState(false);
@@ -94,6 +96,8 @@ export default function HeroSection() {
      
     </section>
     <FeaturedProducts />
+    <Blog/>
+    <HowUse/>
 </>
   );
 }

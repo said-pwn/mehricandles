@@ -7,6 +7,8 @@ import CustomSelect from "../components/CustomSelect";
 import CustomDatePicker from "../components/CustomDate";
 import CustomInput from "../components/CustomInput";
 import CustomTextarea from "../components/CustomTextarea";
+import PhoneInput from "../components/PhoneInput";
+import CustomInputSecond from "../components/customInputSecond";
 
 
 
@@ -145,7 +147,19 @@ const [lastOrder, setLastOrder] = useState(null);
       const res = await fetch(serverUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(order),
+         body: JSON.stringify({
+    firstName: formData.firstName,
+    lastName: formData.lastName,
+    phone: "+998" + formData.phone.replace(/\D/g, ""),
+    delivery: formData.delivery,
+    payment: formData.payment,
+    date: formData.date,
+    comment: formData.comment,
+    connectMethod: formData.connectMethod,
+    connectMethodComment: formData.connectMethodComment,
+    items: cartItems, // <--- исправлено
+    total: calculateTotal(), // <--- исправлено
+  }),
       });
 
       if (!res.ok) {
@@ -240,20 +254,22 @@ const [lastOrder, setLastOrder] = useState(null);
     onChange={handleChange}
   />
 
-  <CustomInput 
-    label={texts.lastName}
-    name="lastName"
+<CustomInputSecond 
     value={formData.lastName}
     onChange={handleChange}
-  />
-
-  <CustomInput 
-    label={texts.phone}
-    name="phone"
     required
-    value={formData.phone}
-    onChange={handleChange}
-  />
+    label={texts.lastName}
+    name="lastName"/>
+
+<PhoneInput
+  label="Телефон"
+  name="phone"
+  value={formData.phone}
+  onChange={handleChange}
+  required
+/>
+
+
 
   <CustomSelect 
     label={texts.deliveryMethod}

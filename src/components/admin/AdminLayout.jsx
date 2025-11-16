@@ -12,8 +12,19 @@ import {
   Menu,
   X,
   Tag,
+  Star,
+  ShoppingBag,
+  ClipboardList,
+  Gift,
+  Percent,
+  Layers,
+  Grid,
+  Code,
+  Cpu,
+  FileText,
 } from "lucide-react";
 import authService from "../../services/auth";
+import { FaBlog, FaFileAlt, FaPen } from "react-icons/fa";
 
 export default function AdminLayout() {
   const navigate = useNavigate();
@@ -31,7 +42,8 @@ export default function AdminLayout() {
     { path: "/admin/categories", icon: Tag, label: "Категории" },
     { path: "/admin/orders", icon: ShoppingCart, label: "Заказы (Отключен)" },
     { path: "/admin/dev", icon: Settings, label: "for dev" },
-    { path: "/admin/offers", icon: Settings, label: "special Offers" },
+    { path: "/admin/offers", icon: Percent, label: "special Offers" },
+    { path: "/admin/blog", icon: FileText, label: "Блог" },
   ];
 
   return (
