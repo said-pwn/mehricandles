@@ -207,7 +207,7 @@ const [lastOrder, setLastOrder] = useState(null);
             <div className="flex justify-between items-center mb-2">
               <span className="text-gray-600">{texts.total}:</span>
               <span className="text-2xl font-bold text-gray-900">
-                {calculateTotal().toLocaleString("ru-RU")} сум
+                {calculateTotal().toLocaleString("ru-RU")} {texts.count}
               </span>
             </div>
           </div>
@@ -279,7 +279,7 @@ const [lastOrder, setLastOrder] = useState(null);
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             >
-              <option value="">Выберите способ</option>
+              <option value="">{texts.chooseMethod}</option>
               <option>{texts.paymentOptionCardTransfer}</option>
             </select>
           </div>
