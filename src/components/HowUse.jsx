@@ -89,6 +89,9 @@ export default function SolidPerfumeTutorial() {
   {/* Градиентная подсветка */}
   <div className="absolute inset-0 bg-gradient-to-t from-purple-400/20 to-pink-300/20 rounded-3xl pointer-events-none"></div>
 </div>
+
+
+
       </div>
     </div>
   );

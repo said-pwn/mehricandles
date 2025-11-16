@@ -138,7 +138,9 @@ tg: "Telegram",
     "enjoyScentDesc": "Твердые духи долго держатся, наслаждайтесь мягким и стойким ароматом весь день. За счет эфирных масел , аромат будет раскрываться поочередно, слегка меняя нотки 😍",
     "videoAlt": "Инструкция по использованию твердых духов",
     "videoFallbackMessage": "Ваш браузер не поддерживает видео. Используйте современный браузер для просмотра инструкции.",
-    seeror: "Увидели ошибку?"
+    seeror: "Увидели ошибку?",
+    ourinstagram: "Наши посты в Instagram",
+    followournew: "Следите за нашими новинками в Instagram"
   },
   UZ: {
     category: "Katalog",
@@ -270,7 +272,9 @@ tg: "Telegram",
     "enjoyScentDesc": "Qattiq atir uzoq turadi, kun bo‘yi yumshoq va uzoq davom etadigan hiddan bahramand bo‘ling. Efir moylari tufayli hid navbati bilan ochiladi va ohista o‘zgaradi 😍",
     "videoAlt": "Qattiq atir ishlatish bo‘yicha qo‘llanma",
     "videoFallbackMessage": "Brauzeringiz video qo‘llab-quvvatlamaydi. Qo‘llanmani ko‘rish uchun zamonaviy brauzerdan foydalaning.",
-    seeror: "Xatoni ko'rdingizmi?"
+    seeror: "Xatoni ko'rdingizmi?",
+    ourinstagram: "Instagram postlarimiz",
+    followournew: "Instagramdagi yangiliklarimizni kuzatib boring"
       
   },
   EN: {
@@ -410,7 +414,8 @@ clearleather: "Clean the leather",
     "videoAlt": "Solid perfume usage tutorial",
     "videoFallbackMessage": "Your browser does not support video. Use a modern browser to view the tutorial.",
     seeror: "Seen an error?",
-    
+    ourinstagram: "Our Instagram posts",
+    followournew: "Follow our updates on Instagram"
   }
  
 };

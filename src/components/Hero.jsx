@@ -5,6 +5,7 @@ import { LanguageContext } from "../context/LanguageContext";
 import FeaturedProducts from "./FeaturedProducts";
 import Blog from "./Blog";
 import HowUse from "./HowUse";
+import InstagramEmbed from "./InstagramEmbed";
 
 export default function HeroSection() {
   const [isHovered, setIsHovered] = useState(false);
@@ -98,6 +99,7 @@ export default function HeroSection() {
     <FeaturedProducts />
     <Blog/>
     <HowUse/>
+    <InstagramEmbed/>
 </>
   );
 }
