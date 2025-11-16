@@ -25,6 +25,7 @@ import Dev from "./Pages/admin/Dev";
 import FeaturedProducts from "./components/FeaturedProducts";
 import SocialLinks from "./components/SocialLinks";
 import { Analytics } from "@vercel/analytics/react";
+import SpecialOffers from "./Pages/admin/SpecialOffers";
 
 function App() {
 
@@ -85,6 +86,7 @@ function App() {
             <Route path="customers" element={<Customers />} />
             <Route path="settings" element={<Settings />} />
             <Route path="dev" element={<Dev />} />
+            <Route path="offers" element={<SpecialOffers />} />
             <Route path="" element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />
           </Route>

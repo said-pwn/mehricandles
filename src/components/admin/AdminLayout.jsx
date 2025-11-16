@@ -31,6 +31,7 @@ export default function AdminLayout() {
     { path: "/admin/categories", icon: Tag, label: "Категории" },
     { path: "/admin/orders", icon: ShoppingCart, label: "Заказы (Отключен)" },
     { path: "/admin/dev", icon: Settings, label: "for dev" },
+    { path: "/admin/offers", icon: Settings, label: "special Offers" },
   ];
 
   return (

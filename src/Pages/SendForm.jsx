@@ -3,6 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import apiService from "../services/api";
 import { LanguageContext } from "../context/LanguageContext";
+import CustomSelect from "../components/CustomSelect";
+import CustomDatePicker from "../components/CustomDate";
+import CustomInput from "../components/CustomInput";
+import CustomTextarea from "../components/CustomTextarea";
+
+
 
 function SuccessModal({ open, order, onClose }) {
   if (!open) return null;
@@ -76,6 +82,8 @@ export default function OrderForm() {
     payment: "",
     comment: "",
     date: "",
+    connectMethod: "",
+    connectMethodComment: "",
   });
   const [successOpen, setSuccessOpen] = useState(false);
 const [lastOrder, setLastOrder] = useState(null);
@@ -97,6 +105,13 @@ const [lastOrder, setLastOrder] = useState(null);
   const calculateTotal = () => {
     return cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   };
+
+  const ErrorText = ({ children }) => (
+  <p className="text-red-500 text-sm mt-1 font-medium">
+    {children}
+  </p>
+);
+
 
  const handleSubmit = async (e) => {
   e.preventDefault();
@@ -124,7 +139,7 @@ const [lastOrder, setLastOrder] = useState(null);
         import.meta.env &&
         import.meta.env.VITE_API_SERVER)
         ? import.meta.env.VITE_API_SERVER
-        : "https://botttttew.onrender.com/api/order";
+        : "https://botttttew-1.onrender.com/api/order";
 
     try {
       const res = await fetch(serverUrl, {
@@ -157,6 +172,7 @@ const [lastOrder, setLastOrder] = useState(null);
       payment: "",
       comment: "",
       date: "",
+      connectMethod: "",
     });
 
   } catch (error) {
@@ -214,112 +230,90 @@ const [lastOrder, setLastOrder] = useState(null);
         </div>
 
         {/* Order Form */}
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 space-y-4"
-        >
+  <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 space-y-6">
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">{texts.firstName} *</label>
-            <input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-            />
-          </div>
+  <CustomInput 
+    label={texts.firstName}
+    name="firstName"
+    required
+    value={formData.firstName}
+    onChange={handleChange}
+  />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">{texts.lastName}</label>
-            <input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-            />
-          </div>
+  <CustomInput 
+    label={texts.lastName}
+    name="lastName"
+    value={formData.lastName}
+    onChange={handleChange}
+  />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">{texts.phone} *</label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-              placeholder="+998901234567"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-            />
-          </div>
+  <CustomInput 
+    label={texts.phone}
+    name="phone"
+    required
+    value={formData.phone}
+    onChange={handleChange}
+  />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">{texts.deliveryMethod} *</label>
-            <select
-              name="delivery"
-              value={formData.delivery}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-            >
-              <option value="">{texts.chooseMethod}</option>
-              <option>{texts.deliveryOptionCourier}</option>
-              <option>{texts.deliveryOptionPost}</option>
-            </select>
-          </div>
+  <CustomSelect 
+    label={texts.deliveryMethod}
+    value={formData.delivery}
+    required
+    options={[texts.deliveryOptionCourier, texts.deliveryOptionPost]}
+    onChange={(val) => setFormData({ ...formData, delivery: val })}
+  />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">{texts.paymentMethod} *</label>
-            <select
-              name="payment"
-              value={formData.payment}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-            >
-              <option value="">{texts.chooseMethod}</option>
-              <option>{texts.paymentOptionCardTransfer}</option>
-            </select>
-          </div>
+  <CustomSelect 
+    label={texts.paymentMethod}
+    value={formData.payment}
+    required
+    options={[texts.paymentOptionCardTransfer]}
+    onChange={(val) => setFormData({ ...formData, payment: val })}
+  />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">{texts.shippingDate} *</label>
-            <input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-            />
-          </div>
+  <CustomDatePicker
+    label={texts.shippingDate}
+    required
+    value={formData.date}
+    onChange={(val) => setFormData({ ...formData, date: val })}
+  />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">{texts.orderComment}</label>
-            <textarea
-              name="comment"
-              rows="3"
-              value={formData.comment}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-            ></textarea>
-            <p>{texts.must}</p>
-          </div>
+  <CustomTextarea
+    label={texts.orderComment}
+    value={formData.comment}
+    name="comment"
+    onChange={handleChange}
+  />
 
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full py-3 rounded-lg text-white font-semibold shadow-lg transition-colors ${
-              loading
-                ? "bg-gray-500 cursor-not-allowed"
-                : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
-            }`}
-          >
-            {loading ? texts.submitProcessing : texts.checkout}
-          </button>
-        </form>
+  <CustomSelect
+    label={texts.chooseMethodc}
+    required
+    value={formData.connectMethod}
+    options={[texts.tg, texts.inst, texts.phoneCall]}
+    onChange={(val) => setFormData({ ...formData, connectMethod: val })}
+  />
+
+  <CustomTextarea
+    label={texts.commentPlaceholder}
+    name="connectMethodComment"
+    required
+    value={formData.connectMethodComment}
+    onChange={handleChange}
+  />
+
+  <button
+    type="submit"
+    disabled={loading}
+    className={`w-full py-3 rounded-xl text-white font-semibold shadow-lg transition-all
+      ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"}
+    `}
+  >
+    {loading ? texts.submitProcessing : texts.checkout}
+  </button>
+
+</form>
+
+
       </div>
 
 <SuccessModal
@@ -336,6 +330,8 @@ const [lastOrder, setLastOrder] = useState(null);
       payment: "",
       comment: "",
       date: "",
+      connectMethod: "",
+      connectMethodComment: "",
     });
     navigate("/");
   }}

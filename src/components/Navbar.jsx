@@ -36,8 +36,8 @@ return () => window.removeEventListener("cartUpdated", handleCartUpdate);
 
 const links = [
 { to: "/", label: texts.main, icon: <Home className="text-blue-500 text-2xl" /> },
-{ to: "/catalog", label: texts.category, icon: <BiCategory className="text-blue-500 text-2xl" /> },
 { to: "/about", label: texts.learnourstory, icon: <BiInfoCircle  className="text-blue-500 text-2xl" /> },
+{ to: "/catalog", label: texts.category, icon: <BiCategory className="text-blue-500 text-2xl" /> },
 ];
 
 useEffect(() => {
@@ -157,7 +157,7 @@ return (
 
     <div className="flex  pl-4 gap-2 items-center">
       <Link to="/" className="text-xl font-bold">
-        MehriCandles.uz
+        𝑀𝑒𝒽𝓇𝒾𝒸𝒶𝓃𝒹𝓁𝑒𝓈.𝓊𝓏
       </Link>
       <a
         href="https://www.instagram.com/mehricandles/"
@@ -249,7 +249,7 @@ return (
     >
       <FaShoppingCart size={26} />
       {cartCount > 0 && (
-        <span className="absolute -top-1 -right-3 bg-blue-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+        <span className="absolute -top-1 -right-3 bg-blue-500 text-white text-xs font-bold px-1.5 py-1 rounded-full">
           {cartCount}
         </span>
       )}

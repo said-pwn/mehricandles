@@ -61,6 +61,7 @@ export default function HeroSection() {
             {texts.learnourstory}
           </Link>
         </div>
+        
 
         {/* ⭐ Trust Indicators */}
         <div className="mt-12 max-w-md border border-stone-200/30 bg-black/50 backdrop-blur-md rounded-lg overflow-hidden">
@@ -84,10 +85,12 @@ export default function HeroSection() {
               <p className="text-xs tracking-wide text-white mt-1">{texts.madein}</p>
             </div>
           </div>
+          
         </div>
       </div>
       
-      {/* Featured Products Section */}
+      
+
      
     </section>
     <FeaturedProducts />
