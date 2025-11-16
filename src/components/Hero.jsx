@@ -55,7 +55,7 @@ export default function HeroSection() {
           </Link>
 
           <Link
-            to="/main"
+            to="/weew"
             className="px-8 py-4 border-2 border-amber-900  text-amber-200 rounded-sm font-medium text-base transition-all duration-300 hover:bg-amber-900/20 hover:text-amber-100"
           >
             {texts.learnourstory}
