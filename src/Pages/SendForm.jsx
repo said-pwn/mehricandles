@@ -205,7 +205,7 @@ const [lastOrder, setLastOrder] = useState(null);
           </div>
           <div className="pt-4 border-t border-gray-200">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-gray-600">Итого:</span>
+              <span className="text-gray-600">{texts.total}:</span>
               <span className="text-2xl font-bold text-gray-900">
                 {calculateTotal().toLocaleString("ru-RU")} сум
               </span>
