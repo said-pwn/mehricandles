@@ -65,38 +65,30 @@ export default function SolidPerfumeTutorial() {
         </div>
 
         {/* Правый блок с fallback видео */}
-        <div className="lg:w-1/2 w-full flex justify-center relative">
-          <div className="overflow-hidden rounded-3xl shadow-3xl border border-gray-200 h-[650px] w-[330px] lg:h-[750px] lg:w-[360px] relative bg-gray-100 flex items-center justify-center">
-            <video
-  src="/video.mp4" // <- путь из public/videos/
-  className="h-full w-full object-cover rounded-3xl"
-  autoPlay
-  loop
-  muted
-  playsInline
-  poster="/photo.png"
->
-  {/* fallback для старых браузеров */}
-  <p className="text-center text-gray-700 px-4">
+  <div className="overflow-hidden rounded-3xl shadow-3xl border border-gray-200 h-[650px] w-[330px] lg:h-[750px] lg:w-[360px] relative bg-gray-100 flex items-center justify-center">
+  <video
+    src="/video.mp4" // видео должно лежать в public
+    className="h-full w-full object-cover rounded-3xl"
+    autoPlay
+    loop
+    muted
+    playsInline
+    poster="/photo.png"
+    >
     {texts.videoFallbackMessage}
-  </p>
+  </video>
 
-              {/* fallback */}
-              <div className="flex flex-col items-center justify-center text-center px-4">
-                <img
-                  src="/photo.png"
-                  alt={texts.videoAlt}
-                  className="rounded-3xl mb-4 shadow-lg"
-                />
-                <p className="text-gray-700 font-medium">
-                  {texts.videoFallbackMessage}
-                </p>
-              </div>
-            </video>
-            {/* Градиентная подсветка */}
-            <div className="absolute inset-0 bg-gradient-to-t from-purple-400/20 to-pink-300/20 rounded-3xl pointer-events-none"></div>
-          </div>
-        </div>
+
+  <img
+    src="/photo.png"
+    alt={texts.videoAlt}
+    className="absolute inset-0 w-full h-full object-cover rounded-3xl"
+    onError={(e) => (e.currentTarget.style.display = "none")}
+  />
+
+  {/* Градиентная подсветка */}
+  <div className="absolute inset-0 bg-gradient-to-t from-purple-400/20 to-pink-300/20 rounded-3xl pointer-events-none"></div>
+</div>
       </div>
     </div>
   );
