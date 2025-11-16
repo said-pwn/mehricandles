@@ -36,7 +36,7 @@ export default function HeroSection() {
 
         
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+        <div className="flex flex-col mt-5 sm:flex-row gap-4 justify-center md:justify-start">
           <Link
             to="/catalog"
             onMouseEnter={() => setIsHovered(true)}
@@ -55,7 +55,7 @@ export default function HeroSection() {
           </Link>
 
           <Link
-            to="/weew"
+            to="/about"
             className="px-8 py-4 border-2 border-amber-900  text-amber-200 rounded-sm font-medium text-base transition-all duration-300 hover:bg-amber-900/20 hover:text-amber-100"
           >
             {texts.learnourstory}
@@ -75,9 +75,13 @@ export default function HeroSection() {
               <p className="text-xs tracking-wide text-white mt-1">{texts.natural}</p>
             </div>
 
+            
+
+           
+
             <div className="flex flex-col justify-center items-center py-6 px-4">
-              <p className="text-2xl font-light text-white">{texts.hour}</p>
-              <p className="text-xs tracking-wide text-white mt-1">{texts.delivery}</p>
+              <p className="text-2xl font-light text-white">100%</p>
+              <p className="text-xs tracking-wide text-white mt-1">{texts.madein}</p>
             </div>
           </div>
         </div>

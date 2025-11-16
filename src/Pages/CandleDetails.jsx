@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { GiCandleLight } from "react-icons/gi";
 import apiService from "../services/api";
 import { products as defaultProducts } from "../data/products";
-import { AlignLeft, StickyNote } from "lucide-react";
+import { AlignLeft, BadgePercent, Flame, Sparkles, SparklesIcon, StickyNote } from "lucide-react";
 
 export default function CandleDetails() {
   const { id } = useParams();
@@ -203,22 +203,25 @@ theme: "colored",
 
               {/* Badges */}
               <div className="mt-4 flex flex-wrap gap-2">
-                {product.isBestseller && (
-                  <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                    🔥 {texts.hit}
-                  </span>
-                )}
-                {product.isNew && (
-                  <span className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                    ✨ {texts.new2}
-                  </span>
-                )}
-                {product.isOnSale && (
-                  <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                    ⭐ {texts.sale}
-                  </span>
-                )}
-              </div>
+  {product.isBestseller && (
+    <span className="bg-red-500 text-black px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+      <Flame className="w-4 h-4" /> {texts.hit}
+    </span>
+  )}
+
+  {product.isNew && (
+    <span className="bg-green-500 text-black px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+      <Sparkles className="w-4 h-4 text-blue-900" /> {texts.new2}
+    </span>
+  )}
+
+  {product.isOnSale && (
+    <span className="bg-orange-500 text-black px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+      <BadgePercent className="w-5 h-5 text-black"  /> {texts.sale}
+    </span>
+  )}
+</div>
+
 
               <div className="mt-8">
                 {Array.isArray(product.types) && product.types.length > 0 && (

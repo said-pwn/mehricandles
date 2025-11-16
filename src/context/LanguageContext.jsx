@@ -93,6 +93,7 @@ selectTypeLabel: "Выберите тип",
 selectPlaceholder: "— Выберите —",
 // select: "Выберите из наших лучших свечей",
 chooseMethod: "Выберите способ",
+madein: "Сделано в Узбекистане",
   },
   UZ: {
     category: "Katalog",
@@ -197,6 +198,7 @@ chooseMethod: "Выберите способ",
     orderErrorToast: "❌ Buyurtma rasmiylashtirishda xatolik yuz berdi.",
     telegramErrorToast: "❌ Buyurtmani Telegramga yuborib bo‘lmadi. Keyinroq urinib ko‘ring.",
     serverResponseError: "Server javobida xatolik",
+    madein: "O'zbekistonda ishlab chiqarilgan",
   },
   EN: {
     category: "Catalog",
@@ -287,7 +289,7 @@ chooseMethod: "Выберите способ",
   noimg: "No image available",
   description: "Description",
   lookmore: "View all products",
-
+madein: "Made in Uzbekistan",
   }
  
 };

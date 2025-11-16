@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Home, Globe, Menu, X, Search } from "lucide-react";
+import { Home, Globe, Menu, X, Search, AlignLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
 FaInstagram,
 FaTelegram,
 FaShoppingCart,
+FaInfoCircle,
 } from "react-icons/fa";
-import { BiCategory } from "react-icons/bi";
+import { BiCategory, BiInfoCircle } from "react-icons/bi";
 import { LanguageContext } from "../context/LanguageContext";
 import Cart from "../Pages/Cart";
 import FeaturedProducts from "./FeaturedProducts";
@@ -36,6 +37,7 @@ return () => window.removeEventListener("cartUpdated", handleCartUpdate);
 const links = [
 { to: "/", label: texts.main, icon: <Home className="text-blue-500 text-2xl" /> },
 { to: "/catalog", label: texts.category, icon: <BiCategory className="text-blue-500 text-2xl" /> },
+{ to: "/about", label: texts.learnourstory, icon: <BiInfoCircle  className="text-blue-500 text-2xl" /> },
 ];
 
 useEffect(() => {
@@ -199,6 +201,7 @@ return (
           exit={{ x: "-100%" }}
           transition={{ type: "spring", stiffness: 100, damping: 15 }}
         >
+        
           <button className="self-end p-4" onClick={() => setMenuOpen(false)}>
             <X size={26} />
           </button>
@@ -236,6 +239,8 @@ return (
       <BiCategory size={30} />
       <span className="text-xs">{texts.category}</span>
     </Link>
+
+    
 
 
     <button
