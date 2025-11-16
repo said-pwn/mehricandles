@@ -34,9 +34,7 @@ export default function HeroSection() {
           {texts.heroDescription}
         </p>
 
-        <p className="text-sm uppercase tracking-widest text-amber-400 font-medium mt-6 mb-12">
-          {texts.freeshipping}
-        </p>
+        
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
           <Link

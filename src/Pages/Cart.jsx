@@ -168,7 +168,7 @@ return ( <div> <Dialog open={open} onClose={setOpen} className="relative z-10"> 
                 <div className="border-t mb-15 md:mb-0 border-gray-200 px-6 py-4 bg-gray-50">
                   <div className="flex justify-between text-base font-medium text-gray-900">
                     <p>{texts.total}</p>
-                    <p>{formatPrice(total)} сум</p>
+                    <p>{formatPrice(total)} {texts.count}</p>
                   </div>
                   
                   <div className="mt-5">

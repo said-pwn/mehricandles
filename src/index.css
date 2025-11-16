@@ -1,1 +1,25 @@
+/* 1. Сначала подключаем шрифты */
+@font-face {
+  font-family: "MyFont";
+  src: url("./assets/Zerove-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "MyFont";
+  src: url("./assets/Zerove-Italic.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* 2. Tailwind */
 @import "tailwindcss";
+
+/* 3. Глобальный шрифт для всех элементов */
+html, body, #root {
+  font-family: "MyFont", sans-serif;
+}
+input, button, select, textarea {
+  font-family: inherit;
+}

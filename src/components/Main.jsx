@@ -17,22 +17,22 @@ export default function CandleShop() {
               <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-400 via-rose-300 to-purple-500 flex items-center justify-center text-white font-bold shadow-inner">
                 S
               </div>
-              <span className="font-semibold text-lg tracking-wide">СвечиТепла</span>
+              <span className="font-semibold text-lg tracking-wide">{texts.brandName || "СвечиТепла"}</span>
             </a>
 
             {/* Desktop Links */}
             <nav className="hidden md:flex items-center gap-6 text-sm">
-              <a href="#catalog" className="hover:text-amber-600 transition-colors">Каталог</a>
-              <a href="#collections" className="hover:text-amber-600 transition-colors">Коллекции</a>
-              <a href="#gifts" className="hover:text-amber-600 transition-colors">Подарки</a>
-              <a href="#about" className="hover:text-amber-600 transition-colors">О нас</a>
+              <a href="#catalog" className="hover:text-amber-600 transition-colors">{texts.navCatalog || texts.category || "Каталог"}</a>
+              <a href="#collections" className="hover:text-amber-600 transition-colors">{texts.navCollections || "Коллекции"}</a>
+              <a href="#gifts" className="hover:text-amber-600 transition-colors">{texts.navGifts || "Подарки"}</a>
+              <a href="#about" className="hover:text-amber-600 transition-colors">{texts.navAbout || texts.learnourstory || "О нас"}</a>
             </nav>
 
             {/* Actions */}
             <div className="flex items-center gap-3">
               <div className="hidden md:flex items-center bg-gray-100 rounded-full px-3 py-1 gap-2 w-[280px]">
                 <Search size={16} className="text-gray-500" />
-                <input placeholder="Поиск свечей..." className="bg-transparent outline-none text-sm w-full" />
+                <input placeholder={texts.searchCandlesPlaceholder || texts.searchPlaceholder || "Поиск свечей..."} className="bg-transparent outline-none text-sm w-full" />
               </div>
 
               <button className="hidden md:flex items-center justify-center p-2 hover:bg-gray-100 rounded-md">
@@ -60,13 +60,13 @@ export default function CandleShop() {
         {mobileOpen && (
           <div className="md:hidden border-t bg-white/95">
             <div className="px-4 py-4 space-y-3">
-              <a href="#catalog" className="block">Каталог</a>
-              <a href="#collections" className="block">Коллекции</a>
-              <a href="#gifts" className="block">Подарки</a>
-              <a href="#about" className="block">О нас</a>
+              <a href="#catalog" className="block">{texts.navCatalog || texts.category || "Каталог"}</a>
+              <a href="#collections" className="block">{texts.navCollections || "Коллекции"}</a>
+              <a href="#gifts" className="block">{texts.navGifts || "Подарки"}</a>
+              <a href="#about" className="block">{texts.navAbout || texts.learnourstory || "О нас"}</a>
 
               <div className="pt-3 border-t">
-                <input placeholder="Поиск..." className="w-full rounded-md border px-3 py-2 text-sm" />
+                <input placeholder={texts.searchPlaceholderShort || texts.searchPlaceholder || "Поиск..."} className="w-full rounded-md border px-3 py-2 text-sm" />
               </div>
             </div>
           </div>
@@ -78,39 +78,39 @@ export default function CandleShop() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight mb-4">
-              Натуральные свечи, созданные с любовью
+              {texts.mainHeroTitle || "Натуральные свечи, созданные с любовью"}
             </h1>
             <p className="text-lg text-gray-700 mb-6">
-              Ароматы, которые наполняют дом уютом. Экологичные ингредиенты, стильная упаковка и атмосфера, которую не спутать.
+              {texts.mainHeroSubtitle || "Ароматы, которые наполняют дом уютом. Экологичные ингредиенты, стильная упаковка и атмосфера, которую не спутать."}
             </p>
 
             <div className="flex flex-wrap gap-3 mb-8">
               <a href="#catalog" className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-md font-semibold shadow">
-                Купить сейчас
+                {texts.buyNow || texts.Add || "Купить сейчас"}
               </a>
               <a href="#collections" className="border border-gray-300 px-6 py-3 rounded-md hover:border-amber-600 hover:text-amber-600 font-medium">
-                Смотреть коллекции
+                {texts.viewCollections || "Смотреть коллекции"}
               </a>
             </div>
 
             <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm text-gray-700">
-              <li className="flex items-center gap-2"><Clock size={16} className="text-amber-600" /> До 60 часов горения</li>
-              <li className="flex items-center gap-2"><Leaf size={16} className="text-amber-600" /> Натуральный воск</li>
-              <li className="flex items-center gap-2"><Gift size={16} className="text-amber-600" /> Идеальный подарок</li>
+              <li className="flex items-center gap-2"><Clock size={16} className="text-amber-600" /> {texts.featureBurnTime || "До 60 часов горения"}</li>
+              <li className="flex items-center gap-2"><Leaf size={16} className="text-amber-600" /> {texts.featureNaturalWax || "Натуральный воск"}</li>
+              <li className="flex items-center gap-2"><Gift size={16} className="text-amber-600" /> {texts.featurePerfectGift || "Идеальный подарок"}</li>
             </ul>
           </div>
 
           {/* Product visual */}
           <div className="relative flex justify-center">
             <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-sm">
-              <img src="/candle-vanilla.jpg" alt="Свеча Ванильная луна" className="rounded-xl mb-4 object-cover w-full h-64" />
-              <h3 className="font-semibold text-lg">Ванильная луна — 200 мл</h3>
-              <p className="text-sm text-gray-600 mt-1">Тёплый ванильный аромат с нотами специй и карамели.</p>
+              <img src="/candle-vanilla.jpg" alt={(texts.sampleCandleAlt || "Свеча Ванильная луна")} className="rounded-xl mb-4 object-cover w-full h-64" />
+              <h3 className="font-semibold text-lg">{texts.sampleCandleTitle || "Ванильная луна — 200 мл"}</h3>
+              <p className="text-sm text-gray-600 mt-1">{texts.sampleCandleDesc || "Тёплый ванильный аромат с нотами специй и карамели."}</p>
 
               <div className="mt-4 flex items-center justify-between">
                 <span className="text-2xl font-bold">₽1,490</span>
                 <button className="flex items-center gap-2 bg-amber-600 text-white px-4 py-2 rounded-md hover:bg-amber-700">
-                  <ShoppingCart size={18} /> В корзину
+                  <ShoppingCart size={18} /> {texts.addToCartCta || texts.Add || "В корзину"}
                 </button>
               </div>
             </div>
@@ -120,7 +120,7 @@ export default function CandleShop() {
 
       {/* FEATURE STRIP */}
       <div className="bg-amber-100 py-3 text-sm text-center text-gray-700 border-t">
-        Бесплатная доставка от ₽3,000 • 30-дневный возврат • Поддержка 24/7
+        {texts.promoStrip || "Бесплатная доставка от ₽3,000 • 30-дневный возврат • Поддержка 24/7"}
       </div>
     </div>
   );

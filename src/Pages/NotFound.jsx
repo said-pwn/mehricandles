@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
+import { LanguageContext } from "../context/LanguageContext";
+
 const NotFound = () => {
+  const { texts } = useContext(LanguageContext);
   return (
     <div className="p-8 text-center">
-      <h1 className="text-4xl font-bold mb-4">404: Not found</h1>
-      <p className="text-lg">{"This is the 404 page content. Lorem ipsum dolor sit amet, consectetur adipiscing elit."}</p>
+      <h1 className="text-4xl font-bold mb-4">{texts.notFoundTitle}</h1>
+      <p className="text-lg">{texts.notFoundDesc}</p>
     </div>
   );
 };

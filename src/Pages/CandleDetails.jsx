@@ -58,19 +58,19 @@ export default function CandleDetails() {
   }, []);
 
   if (loading || !product) {
-    return <div className="text-center py-12">Загрузка...</div>;
+    return <div className="text-center py-12">{texts.loading}</div>;
   }
 
   // ✅ Добавляем товар в корзину
   const handleAddToCart = () => {
     if (!product || !product.id) {
-      toast.error("Ошибка: товар не найден");
+      toast.error(texts.productNotFoundError || "Ошибка: товар не найден");
       return;
     }
 
     // Если у товара есть набор типов, требуем выбор
     if (Array.isArray(product.types) && product.types.length > 0 && !selectedType) {
-      toast.error("Пожалуйста, выберите тип товара");
+      toast.error(texts.pleaseSelectType);
       return;
     }
 
@@ -142,7 +142,7 @@ theme: "colored",
                   />
                 ) : (
                   <div className="h-full w-full flex items-center justify-center text-gray-400">
-                    <span>Нет изображения</span>
+                    <span>{texts.noImage}</span>
                   </div>
                 )}
               </div>
@@ -163,40 +163,40 @@ theme: "colored",
               <div className="mt-6 space-y-2">
                 {product.category && (
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Категория:</span> {product.category}
+                    <span className="font-semibold">{texts.categoryLabel}</span> {product.category}
                   </p>
                 )}
                 {product.aroma && (
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Аромат:</span> {product.aroma}
+                    <span className="font-semibold">{texts.aromaLabel}</span> {product.aroma}
                   </p>
                 )}
                 {product.burnTime && (
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Время горения:</span> {product.burnTime}
+                    <span className="font-semibold">{texts.burnTimeLabel}</span> {product.burnTime}
                   </p>
                 )}
                 {product.waxComposition && (
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Состав воска:</span> {product.waxComposition}
+                    <span className="font-semibold">{texts.waxCompositionLabel}</span> {product.waxComposition}
                   </p>
                 )}
                 {product.cottonWick && (
-                  <p className="text-sm text-green-600 font-semibold">✓ Фитиль из хлопка</p>
+                  <p className="text-sm text-green-600 font-semibold">{texts.cottonWickLabel}</p>
                 )}
                 {product.size && (
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Размер:</span> {product.size}
+                    <span className="font-semibold">{texts.sizeLabel}</span> {product.size}
                   </p>
                 )}
                 {product.color && (
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Цвет:</span> {product.color}
+                    <span className="font-semibold">{texts.colorLabel}</span> {product.color}
                   </p>
                 )}
                 {product.shape && (
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Форма:</span> {product.shape}
+                    <span className="font-semibold">{texts.shapeLabel}</span> {product.shape}
                   </p>
                 )}
               </div>
@@ -205,17 +205,17 @@ theme: "colored",
               <div className="mt-4 flex flex-wrap gap-2">
                 {product.isBestseller && (
                   <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                    🔥 Хит продаж
+                    🔥 {texts.hit}
                   </span>
                 )}
                 {product.isNew && (
                   <span className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                    ✨ Новинка
+                    ✨ {texts.new2}
                   </span>
                 )}
                 {product.isOnSale && (
                   <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                    ⭐ Акция
+                    ⭐ {texts.sale}
                   </span>
                 )}
               </div>
@@ -223,13 +223,13 @@ theme: "colored",
               <div className="mt-8">
                 {Array.isArray(product.types) && product.types.length > 0 && (
                   <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Выберите тип</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{texts.selectTypeLabel}</label>
                     <select
                       value={selectedType}
                       onChange={(e) => setSelectedType(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     >
-                      <option value="">— Выберите —</option>
+                      <option value="">{texts.selectPlaceholder}</option>
                       {product.types.map((t, idx) => (
                         <option key={idx} value={t}>{t}</option>
                       ))}
@@ -268,7 +268,7 @@ theme: "colored",
       <h3 className="flex items-center text-lg font-semibold text-black mb-3">
        
          <AlignLeft className="w-5 h-5 text-indigo-900 mr-2" />
-        Description
+        {texts.description}
       </h3>
       <p className="text-black  leading-relaxed whitespace-pre-line">
         {product.description}
@@ -280,7 +280,7 @@ theme: "colored",
 
             {product.highlights && product.highlights.length > 0 && (
               <div className="mt-10">
-                <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
+                <h3 className="text-sm font-medium text-gray-900">{texts.highlights}</h3>
                 <ul
                   role="list"
                   className="list-disc space-y-2 pl-4 text-sm text-gray-600 mt-4"
@@ -294,7 +294,7 @@ theme: "colored",
 
             {product.details && (
               <div className="mt-10">
-                <h2 className="text-sm font-medium text-gray-900">Details</h2>
+                <h2 className="text-sm font-medium text-gray-900">{texts.details}</h2>
                 <p className="mt-4 mb-10 text-sm text-gray-600">
                   {product.details}
                 </p>

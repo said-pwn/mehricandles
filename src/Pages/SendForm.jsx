@@ -11,55 +11,55 @@ function SuccessModal({ open, order, onClose }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white">
-          <h3 className="text-2xl font-bold">Заказ оформлен ✅</h3>
-          <p className="opacity-90 mt-1">Спасибо! Мы свяжемся с вами для подтверждения.</p>
+          <h3 className="text-2xl font-bold">{texts.orderPlacedTitle}</h3>
+          <p className="opacity-90 mt-1">{texts.orderPlacedDesc}</p>
         </div>
         <div className="p-6 space-y-4">
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div>
-              <p className="text-gray-500">Имя</p>
+              <p className="text-gray-500">{texts.firstName}</p>
               <p className="font-semibold text-gray-900">{order?.firstName} {order?.lastName}</p>
             </div>
             <div>
-              <p className="text-gray-500">Телефон</p>
+              <p className="text-gray-500">{texts.phone}</p>
               <p className="font-semibold text-gray-900">{order?.phone}</p>
             </div>
             <div>
-              <p className="text-gray-500">Доставка</p>
+              <p className="text-gray-500">{texts.deliveryMethod}</p>
               <p className="font-semibold text-gray-900">{order?.delivery || "—"}</p>
             </div>
             <div>
-              <p className="text-gray-500">Оплата</p>
+              <p className="text-gray-500">{texts.paymentMethod}</p>
               <p className="font-semibold text-gray-900">{order?.payment || "—"}</p>
             </div>
           </div>
 
           <div className="bg-gray-50 rounded-xl p-4">
-            <p className="font-semibold text-gray-900 mb-2">Состав заказа</p>
+            <p className="font-semibold text-gray-900 mb-2">{texts.orderContents}</p>
             <div className="space-y-2 max-h-48 overflow-auto pr-1">
               {order?.items?.map((it) => (
                 <div key={it.id} className="flex justify-between text-sm">
                   <span className="text-gray-700">{it.name} × {it.quantity}</span>
-                  <span className="font-semibold">{(it.price * it.quantity).toLocaleString("ru-RU")} сум</span>
+                  <span className="font-semibold">{(it.price * it.quantity).toLocaleString("ru-RU")} {texts.count}</span>
                 </div>
               ))}
             </div>
             <div className="flex justify-between items-center pt-3 mt-3 border-t">
-              <span className="text-gray-600">Итого</span>
-              <span className="text-xl font-bold text-gray-900">{(order?.total || 0).toLocaleString("ru-RU")} сум</span>
+              <span className="text-gray-600">{texts.total}</span>
+              <span className="text-xl font-bold text-gray-900">{(order?.total || 0).toLocaleString("ru-RU")} {texts.count}</span>
             </div>
           </div>
 
           {order?.comment && (
             <div className="bg-white rounded-xl border p-4">
-              <p className="text-sm text-gray-500">Комментарий</p>
+              <p className="text-sm text-gray-500">{texts.orderComment}</p>
               <p className="text-gray-900 mt-1">{order.comment}</p>
             </div>
           )}
         </div>
         <div className="p-6 pt-0 flex gap-3 justify-end">
-          <button onClick={onClose} className="px-5 py-2 rounded-lg border text-gray-700 hover:bg-gray-50">Закрыть</button>
-          <a href="/catalog" className="px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">В каталог</a>
+          <button onClick={onClose} className="px-5 py-2 rounded-lg border text-gray-700 hover:bg-gray-50">{texts.close}</button>
+          <a href="/catalog" className="px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">{texts.toCatalog}</a>
         </div>
       </div>
     </div>
@@ -134,18 +134,18 @@ const [lastOrder, setLastOrder] = useState(null);
       });
 
       if (!res.ok) {
-        throw new Error("Ошибка ответа сервера");
+        throw new Error(texts.serverResponseError);
       }
     } catch (err) {
       console.error("Ошибка отправки в Telegram:", err);
-      toast.error("❌ Не удалось отправить заказ в Telegram. Попробуйте позже.");
+      toast.error(texts.telegramErrorToast);
     }
 
     // Очищаем корзину
     localStorage.removeItem("cart");
     window.dispatchEvent(new CustomEvent("cartUpdated", { detail: [] }));
 
-    toast.success("✅ Заказ успешно оформлен!");
+    toast.success(texts.orderSuccessToast);
     setLastOrder(order);
     setSuccessOpen(true);
 
@@ -161,7 +161,7 @@ const [lastOrder, setLastOrder] = useState(null);
 
   } catch (error) {
     console.error("Ошибка:", error);
-    toast.error("❌ Произошла ошибка при оформлении заказа.");
+    toast.error(texts.orderErrorToast);
   } finally {
     setLoading(false);
   }
@@ -170,13 +170,13 @@ const [lastOrder, setLastOrder] = useState(null);
   if (cartItems.length === 0) {
     return (
       <div className="max-w-xl mx-auto mt-10 bg-white p-6 rounded-xl shadow-lg text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Корзина пуста</h2>
-        <p className="text-gray-600 mb-6">Добавьте товары в корзину перед оформлением заказа</p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">{texts.empty}</h2>
+        <p className="text-gray-600 mb-6">{texts.emptyCartPrompt}</p>
         <a
           href="/catalog"
           className="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors"
         >
-          Перейти в каталог
+          {texts.goToCatalog}
         </a>
       </div>
     );
@@ -184,21 +184,21 @@ const [lastOrder, setLastOrder] = useState(null);
 
   return (
     <div className="max-w-4xl mx-auto mt-10 p-6">
-      <h2 className="text-3xl font-bold text-gray-900 mb-6">Оформление заказа</h2>
+      <h2 className="text-3xl font-bold text-gray-900 mb-6">{texts.checkoutTitle}</h2>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Order Summary */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Ваш заказ</h3>
+          <h3 className="text-xl font-bold text-gray-900 mb-4">{texts.yourOrder}</h3>
           <div className="space-y-3 mb-4">
             {cartItems.map((item) => (
               <div key={item.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                 <div>
                   <p className="font-semibold text-gray-900">{item.name}</p>
-                  <p className="text-sm text-gray-600">Количество: {item.quantity}</p>
+                  <p className="text-sm text-gray-600">{texts.quantity} {item.quantity}</p>
                 </div>
                 <p className="font-semibold text-gray-900">
-                  {(item.price * item.quantity).toLocaleString("ru-RU")} сум
+                  {(item.price * item.quantity).toLocaleString("ru-RU")} {texts.count}
                 </p>
               </div>
             ))}
@@ -220,7 +220,7 @@ const [lastOrder, setLastOrder] = useState(null);
         >
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Имя *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{texts.firstName} *</label>
             <input
               type="text"
               name="firstName"
@@ -232,7 +232,7 @@ const [lastOrder, setLastOrder] = useState(null);
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Фамилия</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{texts.lastName}</label>
             <input
               type="text"
               name="lastName"
@@ -243,7 +243,7 @@ const [lastOrder, setLastOrder] = useState(null);
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Номер телефона *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{texts.phone} *</label>
             <input
               type="tel"
               name="phone"
@@ -256,7 +256,7 @@ const [lastOrder, setLastOrder] = useState(null);
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Способ доставки *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{texts.deliveryMethod} *</label>
             <select
               name="delivery"
               value={formData.delivery}
@@ -264,14 +264,14 @@ const [lastOrder, setLastOrder] = useState(null);
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             >
-              <option value="">Выберите способ</option>
-              <option>Курьером</option>
-              <option>Почтой</option>
+              <option value="">{texts.chooseMethod}</option>
+              <option>{texts.deliveryOptionCourier}</option>
+              <option>{texts.deliveryOptionPost}</option>
             </select>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Способ оплаты *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{texts.paymentMethod} *</label>
             <select
               name="payment"
               value={formData.payment}
@@ -280,12 +280,12 @@ const [lastOrder, setLastOrder] = useState(null);
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             >
               <option value="">Выберите способ</option>
-              <option>Перевод на карту</option>
+              <option>{texts.paymentOptionCardTransfer}</option>
             </select>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Дата отправки *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{texts.shippingDate} *</label>
             <input
               type="date"
               name="date"
@@ -297,7 +297,7 @@ const [lastOrder, setLastOrder] = useState(null);
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Комментарий к заказу</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{texts.orderComment}</label>
             <textarea
               name="comment"
               rows="3"
@@ -317,7 +317,7 @@ const [lastOrder, setLastOrder] = useState(null);
                 : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
             }`}
           >
-            {loading ? "Оформление..." : "Оформить заказ"}
+            {loading ? texts.submitProcessing : texts.checkout}
           </button>
         </form>
       </div>

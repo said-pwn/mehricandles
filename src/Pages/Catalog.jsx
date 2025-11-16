@@ -118,7 +118,7 @@ export default function Catalog() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
               <input
                 type="text"
-                placeholder="Поиск по названию, описанию, аромату..."
+                placeholder={texts.searchPlaceholder}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
@@ -161,7 +161,7 @@ export default function Catalog() {
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
-                  Все товары
+                  {texts.allProducts}
                 </button>
                 <button
                   onClick={() => setSelectedCategory("bestseller")}
@@ -172,7 +172,7 @@ export default function Catalog() {
                   }`}
                 >
                   <Flame size={16} />
-                  Хит продаж
+                  {texts.hit}
                 </button>
                 <button
                   onClick={() => setSelectedCategory("new")}
@@ -194,7 +194,7 @@ export default function Catalog() {
                   }`}
                 >
                   <Star size={16} />
-                  Акции
+                  {texts.sales}
                 </button>
                 {categories.map((category) => (
                   <button
@@ -216,7 +216,7 @@ export default function Catalog() {
 
         {/* Results Count */}
         <div className="mb-4 text-sm text-gray-600">
-          Найдено товаров: {filteredProducts.length}
+          {texts.foundProducts}: {filteredProducts.length}
         </div>
 
         {/* Products Grid */}
@@ -237,7 +237,7 @@ export default function Catalog() {
                     />
                   ) : (
                     <div className="h-full w-full flex items-center justify-center text-gray-400">
-                      <span>Нет изображения</span>
+                      <span>{texts.noImage}</span>
                     </div>
                   )}
                   
@@ -292,8 +292,8 @@ export default function Catalog() {
         ) : (
           <div className="text-center py-16 bg-white rounded-xl shadow-lg">
             <Search className="mx-auto text-gray-400 mb-4" size={48} />
-            <p className="text-gray-600 text-lg mb-2">Товары не найдены</p>
-            <p className="text-gray-500 text-sm">Попробуйте изменить параметры поиска или фильтры</p>
+            <p className="text-gray-600 text-lg mb-2">{texts.notFound}</p>
+            <p className="text-gray-500 text-sm">{texts.tryChangeFilters}</p>
             <button
               onClick={() => {
                 setSearchTerm("");
@@ -302,7 +302,7 @@ export default function Catalog() {
               }}
               className="mt-4 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
             >
-              Сбросить фильтры
+              {texts.resetFilters}
             </button>
           </div>
         )}

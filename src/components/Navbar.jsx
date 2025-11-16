@@ -82,7 +82,7 @@ onClick={() => setLanguageOpen(!languageOpen)}
 return (
 <>
 {/* Верхний навбар */} <nav className="hidden md:flex  bg-gray-300 px-4  sm:px-6 lg:px-8 py-4"> <div className="max-w-7xl mx-auto flex items-center justify-between w-full"> <Link to="/" className="relative text-xl lg:text-2xl font-bold text-black/70">
-𝓂𝑒𝒽𝓇𝒾𝒸𝒶𝓃𝒹𝓁𝑒𝓈 </Link>
+𝑀𝑒𝒽𝓇𝒾𝒸𝒶𝓃𝒹𝓁𝑒𝓈.𝓊𝓏</Link>
 
 <Link
                 to="/catalog"

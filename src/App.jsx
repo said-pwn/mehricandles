@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -27,8 +27,19 @@ import SocialLinks from "./components/SocialLinks";
 import { Analytics } from "@vercel/analytics/react";
 
 function App() {
+
+  const [lang, setLang] = useState("RU");
+
+  useEffect(() => {
+    // Удаляем старые классы
+    document.body.classList.remove("lang-ru", "lang-uz", "lang-en");
+    // Добавляем класс для текущего языка
+    document.body.classList.add(`lang-${lang.toLowerCase()}`);
+  }, [lang]);
+
+  
   return (
-    <div className="bg-gray-600">
+    <div className="bg-gray-600 font-myfont">
     <LanguageProvider>
       <Router>
         <Routes>
