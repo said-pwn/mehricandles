@@ -29,6 +29,8 @@ import SpecialOffers from "./Pages/admin/SpecialOffers";
 import Blog from "./Pages/admin/Blog";
 import BlogDetails from "./Pages/BlogDetails";
 import BlogFeed from "./components/BlogFeed";
+import Snow from "./components/Snow";
+// import { CandlestickLit } from "lucide-react";
 
 function App() {
 
@@ -53,6 +55,8 @@ function App() {
             element={
               <div className="min-h-screen bg-white text-gray-800 flex flex-col">
                 <Navbar />
+                
+                {/* <Snow /> */}
                 <div className="flex-1">
                   <Routes>
                     <Route path="/" element={<Hero />} />

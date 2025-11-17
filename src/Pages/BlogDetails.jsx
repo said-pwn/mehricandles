@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { getPostById, likePost } from "../services/blogApi";
@@ -39,15 +39,15 @@ export default function BlogDetails() {
   if (!post) return <p className="text-center mt-10">Пост не найден</p>;
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
+    <div className="max-w-3xl mx-auto px-4 py-8 overflow-hidden">
       <button onClick={() => navigate(-1)} className="mb-4 px-3 py-1 border rounded hover:bg-gray-200">
         ← Назад
       </button>
 
       {post.image && <img src={post.image} alt={post.title} className="w-full h-72 object-cover rounded mb-6" />}
-      <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
+      <h1 className="text-3xl font-bold mb-4 break-words">{post.title}</h1>
       <p className="text-gray-500 mb-4">{new Date(post.createdAt).toLocaleDateString()}</p>
-      <p className="text-gray-800 mb-6">{post.text}</p>
+      <p className="text-gray-800 mb-6 break-words whitespace-pre-wrap">{post.text}</p>
 
       <button
         onClick={handleLike}

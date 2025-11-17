@@ -31,7 +31,7 @@ export default function InstagramEmbed() {
     <>
     <div className="text-center mt-12">
       <h2 className="text-2xl font-semibold mb-4">{texts.ourinstagram}</h2>
-   <p className="text-gray-600 flex items-center justify-center gap-2 mt-2 text-lg">
+   <p className="text-gray-600 flex items-center justify-center gap-2 mt-2 text-2x1">
   {texts.followournew}
 
   <a

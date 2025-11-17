@@ -32,3 +32,52 @@ input, button, select, textarea {
   text-overflow: ellipsis;
 }
 
+.newspaper-page {
+  background: #f9f6ef;
+  padding: 40px;
+  font-family: "Georgia", serif;
+}
+
+/* Newspaper article style */
+.article-text {
+  text-align: justify;
+  hyphens: auto;
+  column-count: 1; /* Хочешь как настоящая газета — поставлю 2 */
+  column-gap: 40px;
+}
+
+.snow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 99999;
+}
+
+.snowflake {
+  position: absolute;
+  top: -10px;
+  color: skyblue;
+  font-size: 0.8rem;
+  opacity: 0.8;
+  animation: fall-snow linear infinite;
+}
+
+@keyframes fall-snow {
+  0% { transform: translateY(-10vh); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+.animate-pulse {
+  animation: pulse 1.5s infinite;
+}
+
+
+

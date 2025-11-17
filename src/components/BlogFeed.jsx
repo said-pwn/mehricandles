@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { getPosts } from "../services/blogApi";
 import { useNavigate } from "react-router-dom";
-import  "../index.css";
+import "../index.css";
 import { LanguageContext } from "../context/LanguageContext";
 
 export default function BlogPreview() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { texts } = useContext(LanguageContext);
 
   const reload = async () => {
     setLoading(true);
@@ -15,46 +16,92 @@ export default function BlogPreview() {
     setPosts(data);
     setLoading(false);
   };
-  const { texts } = useContext(LanguageContext);
 
-  useEffect(() => { reload(); }, []);
+  useEffect(() => {
+    reload();
+  }, []);
 
-  if (loading) return <p className="text-center mt-10 text-gray-500">{texts.loading}</p>;
-  if (!posts.length) return <p className="text-center mt-10 text-gray-400">{texts.noblog}</p>;
+  if (loading)
+    return (
+      <p className="text-center mt-10 text-gray-500 italic tracking-wide">
+        {texts.loading}
+      </p>
+    );
+
+  if (!posts.length)
+    return (
+      <p className="text-center mt-10 text-gray-400 italic tracking-wide">
+        {texts.noblog}
+      </p>
+    );
 
   return (
-    <div className="mt-10 container mx-auto px-4 mb-20">
-      <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">{texts.blog}</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div className="mt-14 container mx-auto px-4 mb-24 font-MyFont">
+
+      {/* ░░ NYT Header ░░ */}
+      <div className="text-center mb-14">
+        <h1 className="text-[62px] md:text-[80px]   tracking-tight text-black">
+          {texts.blog}
+        </h1>
+
+        <div className="mx-auto mt-3 w-40 border-b-[3px] border-black"></div>
+
+        <p className="mt-4 text-gray-700 font-serif italic text-lg">
+          {new Date().toLocaleDateString()}
+        </p>
+      </div>
+
+      {/* ░░ NYT Grid Layout ░░ */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
         {posts.map((post) => (
           <div
             key={post.id}
-            className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col"
+            className="border border-gray-300 bg-white shadow-sm 
+            hover:shadow-md transition duration-300"
           >
+            {/* Image */}
             {post.image && (
-              <div className="relative overflow-hidden h-52">
+              <div className="h-60 overflow-hidden border-b border-gray-300">
                 <img
                   src={post.image}
                   alt={post.title}
-                  className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-cover  transition-all duration-500 ease-in-out"
                 />
               </div>
             )}
-            <div className="p-5 flex flex-col flex-1">
-              <h2 className="text-xl font-semibold mb-2 text-gray-800">{post.title}</h2>
-              <p className="text-gray-600 mb-4 truncate-multiline flex-1">{post.text}</p>
-              <div className="flex justify-between items-center mt-auto">
-                <span className="text-gray-400 text-sm">{new Date(post.createdAt).toLocaleDateString()}</span>
+
+            {/* Content */}
+            <div className="p-6">
+
+              {/* Title */}
+              <h2 className="font-serif text-[28px] font-bold text-black leading-tight mb-3">
+                {post.title}
+              </h2>
+
+              {/* Short text */}
+              <p className="font-serif text-[17px] text-gray-800 leading-relaxed line-clamp-5 mb-6">
+                {post.text}
+              </p>
+
+              {/* Footer */}
+              <div className="flex justify-between items-center border-t pt-3 border-gray-300">
+                <span className="text-sm text-gray-500 font-serif italic">
+                  {new Date(post.createdAt).toLocaleDateString()}
+                </span>
+
                 <button
                   onClick={() => navigate(`/blog/${post.id}`)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
+                  className="text-black font-serif font-semibold hover:underline"
                 >
                   {texts.readmore} →
                 </button>
               </div>
+
             </div>
           </div>
         ))}
+
       </div>
     </div>
   );

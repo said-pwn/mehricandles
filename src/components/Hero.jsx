@@ -13,7 +13,7 @@ export default function HeroSection() {
 
   return (
 <>
-    <section className="relative min-h-screen w-full flex flex-col md:flex-row">
+    <section className="relative min-h-screen w-full flex flex-col md:flex-row font-MyFont">
       {/* 🖼 Левая часть — фоновое изображение */}
       <div className="relative w-full md:w-1/2 h-[50vh] md:h-auto">
         <img
@@ -29,7 +29,7 @@ export default function HeroSection() {
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center md:items-start text-center md:text-left bg-gradient-to-br from-black via-stone-900 to-black px-6 md:px-12 lg:px-20 py-16">
         <div className="h-1 w-16 bg-amber-900 rounded-full mb-6 mx-auto md:mx-0" />
 
-        <h1 className="font-serif text-5xl sm:text-6xl font-light text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)] tracking-tight">
+        <h1 className=" text-5xl sm:text-6xl  text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)] tracking-tight">
           {texts.iluminate}
         </h1>
 

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Flame, Sparkles, Star } from "lucide-react";
 import apiService from "../services/api";
 import { LanguageContext } from "../context/LanguageContext";
+import OurProductst from "./OurProductst";
 
 export default function FeaturedProducts() {
   const [products, setProducts] = useState([]);
@@ -58,7 +59,7 @@ export default function FeaturedProducts() {
   }
 
   return (
-    <section className="bg-gray-400 py-16 ">
+    <section className="bg-white text-black py-16 ">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">{texts.popular}</h2>
@@ -136,6 +137,7 @@ export default function FeaturedProducts() {
           </Link>
         </div>
       </div>
+      <OurProductst/>
     </section>
   );
 }
