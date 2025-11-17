@@ -1,11 +1,13 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { IoChevronDown } from "react-icons/io5";
+import { LanguageContext } from "../context/LanguageContext";
 
 export default function CustomSelect({ label, value, options, onChange, required }) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef();
+  const { texts } = useContext(LanguageContext);
 
-  // Закрытие селекта при клике вне
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
@@ -27,7 +29,7 @@ export default function CustomSelect({ label, value, options, onChange, required
         `}
       >
         <span className={value ? "text-gray-900" : "text-gray-400"}>
-          {value || "Выберите..."}
+          {value || texts.chooseselect}
         </span>
         <IoChevronDown className={`text-gray-500 transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
       </div>

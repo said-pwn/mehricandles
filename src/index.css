@@ -23,3 +23,12 @@ html, body, #root {
 input, button, select, textarea {
   font-family: inherit;
 }
+
+.truncate-multiline {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* сколько строк показываем */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+

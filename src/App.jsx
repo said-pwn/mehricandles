@@ -27,6 +27,8 @@ import SocialLinks from "./components/SocialLinks";
 import { Analytics } from "@vercel/analytics/react";
 import SpecialOffers from "./Pages/admin/SpecialOffers";
 import Blog from "./Pages/admin/Blog";
+import BlogDetails from "./Pages/BlogDetails";
+import BlogFeed from "./components/BlogFeed";
 
 function App() {
 
@@ -60,6 +62,8 @@ function App() {
                     <Route path="/checkout" element={<SendForm />} />
                     <Route path="*" element={<NotFound />} />
                     <Route path="/featured" element={<FeaturedProducts />} />
+                    <Route path="/blog" element={<BlogFeed />} />
+                    <Route path="/blog/:id" element={<BlogDetails />} />
                   </Routes>
                   
                   <SocialLinks/>

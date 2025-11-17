@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { LanguageContext } from "../context/LanguageContext";
 
 export default function NameInput({ label, name, value, onChange }) {
   const [isFocused, setIsFocused] = useState(false);
   const [error, setError] = useState("");
+  const { texts } = useContext(LanguageContext);
 
   const handleChange = (e) => {
     const val = e.target.value;
 
     // Проверка: только буквы и пробелы
     if (/[^a-zA-Zа-яА-ЯёЁ\s]/.test(val)) {
-      setError("Только буквы и пробелы");
+      setError(texts.onlyletters);
     } else {
       setError("");
       onChange(e);
@@ -19,7 +21,7 @@ export default function NameInput({ label, name, value, onChange }) {
   const handleBlur = () => {
     setIsFocused(false);
     if (!value) {
-      setError("Поле не может быть пустым");
+      setError(`${texts.failednotempty}`);
     }
   };
 
@@ -39,7 +41,7 @@ export default function NameInput({ label, name, value, onChange }) {
         onChange={handleChange}
         onFocus={() => setIsFocused(true)}
         onBlur={handleBlur}
-        placeholder={isFocused || value ? "Введите имя" : ""}
+        placeholder={isFocused || value ? texts.enterfirst : ""}
         className={`w-full px-4 pt-5 pb-3 border rounded-xl bg-gray-50 
           outline-none text-gray-900 transition-all
           ${error ? "border-red-500" : "border-gray-300"} 

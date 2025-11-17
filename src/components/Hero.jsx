@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import { LanguageContext } from "../context/LanguageContext";
 import FeaturedProducts from "./FeaturedProducts";
-import Blog from "./Blog";
+import Blog from "./BlogFeed";
 import HowUse from "./HowUse";
 import InstagramEmbed from "./InstagramEmbed";
 

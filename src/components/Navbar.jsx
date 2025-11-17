@@ -7,6 +7,8 @@ FaInstagram,
 FaTelegram,
 FaShoppingCart,
 FaInfoCircle,
+FaReact,
+FaRegNewspaper,
 } from "react-icons/fa";
 import { BiCategory, BiInfoCircle } from "react-icons/bi";
 import { LanguageContext } from "../context/LanguageContext";
@@ -35,9 +37,10 @@ return () => window.removeEventListener("cartUpdated", handleCartUpdate);
 }, []);
 
 const links = [
-{ to: "/", label: texts.main, icon: <Home className="text-blue-500 text-2xl" /> },
-{ to: "/about", label: texts.learnourstory, icon: <BiInfoCircle  className="text-blue-500 text-2xl" /> },
-{ to: "/catalog", label: texts.category, icon: <BiCategory className="text-blue-500 text-2xl" /> },
+  { to: "/", label: texts.main, icon: <Home className="text-blue-500 text-2xl" /> },
+  { to: "/about", label: texts.learnourstory, icon: <BiInfoCircle className="text-blue-500 text-2xl" /> },
+  { to: "/catalog", label: texts.category, icon: <BiCategory className="text-blue-500 text-2xl" /> },
+  { to: "/blog", label: texts.blog, icon: <FaRegNewspaper className="text-blue-500 text-2xl" /> },
 ];
 
 useEffect(() => {

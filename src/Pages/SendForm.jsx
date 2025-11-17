@@ -247,13 +247,12 @@ const [lastOrder, setLastOrder] = useState(null);
         {/* Order Form */}
   <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 space-y-6">
 
-  <CustomInput 
-    label={texts.firstName}
-    name="firstName"
-    required
+ <CustomInput 
     value={formData.firstName}
     onChange={handleChange}
-  />
+    required
+    label={texts.firstName}
+    name="firstName"/>
 
 <CustomInputSecond 
     value={formData.lastName}

@@ -38,7 +38,7 @@ export default function SolidPerfumeTutorial() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center p-6">
+    <div className="min-h-screen bg-gray-400 flex flex-col items-center p-6">
       <h1 className="text-4xl lg:text-5xl font-extrabold mb-12 text-gray-900 text-center lg:text-left">
         {texts.howUseTitle}
       </h1>
