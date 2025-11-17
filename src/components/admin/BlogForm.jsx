@@ -1,9 +1,14 @@
+// src/components/BlogForm.jsx
 import React, { useState, useEffect } from "react";
+import { addPost, updatePost } from "../services/blogApi";
+
+const IMGUR_CLIENT_ID = "ТВОЙ_CLIENT_ID"; // нужно зарегистрировать бесплатный на Imgur
 
 export default function BlogForm({ onSubmit, editingPost }) {
   const [title, setTitle] = useState(editingPost?.title || "");
   const [text, setText] = useState(editingPost?.text || "");
   const [image, setImage] = useState(editingPost?.image || null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setTitle(editingPost?.title || "");
@@ -14,26 +19,63 @@ export default function BlogForm({ onSubmit, editingPost }) {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onloadend = () => setImage(reader.result);
-    reader.readAsDataURL(file);
+    setImage(file); // сохраняем как File
   };
 
-  const handleSubmit = (e) => {
+  const uploadImageToImgur = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const res = await fetch("https://api.imgur.com/3/image", {
+      method: "POST",
+      headers: {
+        Authorization: `Client-ID ${IMGUR_CLIENT_ID}`,
+      },
+      body: formData,
+    });
+
+    const data = await res.json();
+    if (!data.success) throw new Error("Ошибка загрузки изображения");
+    return data.data.link;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !text) return alert("Введите заголовок и текст");
-    onSubmit({
-      id: editingPost?.id || Date.now().toString(),
-      title,
-      text,
-      image,
-      likes: editingPost?.likes || 0,
-      likedBy: editingPost?.likedBy || [],
-      createdAt: editingPost?.createdAt || new Date().toISOString(),
-    });
-    setTitle("");
-    setText("");
-    setImage(null);
+
+    setLoading(true);
+    try {
+      let imageUrl = image;
+      if (image instanceof File) {
+        imageUrl = await uploadImageToImgur(image);
+      }
+
+      const postData = {
+        id: editingPost?.id || Date.now().toString(),
+        title,
+        text,
+        image: imageUrl,
+        likes: editingPost?.likes || 0,
+        likedBy: editingPost?.likedBy || [],
+        createdAt: editingPost?.createdAt || new Date().toISOString(),
+      };
+
+      if (editingPost) {
+        await updatePost(postData);
+      } else {
+        await addPost(postData);
+      }
+
+      onSubmit(postData);
+      setTitle("");
+      setText("");
+      setImage(null);
+    } catch (err) {
+      console.error(err);
+      alert("Ошибка при сохранении поста");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -52,12 +94,18 @@ export default function BlogForm({ onSubmit, editingPost }) {
         className="border p-2 w-full mb-2 rounded"
       />
       <input type="file" accept="image/*" onChange={handleImageChange} className="mb-2" />
-      {image && <img src={image} alt="preview" className="w-32 h-32 object-cover mb-2" />}
+      {image && !(image instanceof File) && (
+        <img src={image} alt="preview" className="w-32 h-32 object-cover mb-2" />
+      )}
+      {image instanceof File && (
+        <p className="text-gray-500 mb-2">Файл выбран: {image.name}</p>
+      )}
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+        disabled={loading}
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition disabled:opacity-50"
       >
-        {editingPost ? "Обновить пост" : "Добавить пост"}
+        {loading ? "Сохраняем..." : editingPost ? "Обновить пост" : "Добавить пост"}
       </button>
     </form>
   );

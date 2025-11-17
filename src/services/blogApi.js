@@ -1,43 +1,47 @@
-// src/services/blogApi.js
+const API_URL = "https://691a5ec52d8d7855756e87ba.mockapi.io/news";
 
 export const getPosts = async () => {
-  const posts = JSON.parse(localStorage.getItem("blog_posts") || "[]");
-  return posts;
+  const res = await fetch(API_URL);
+  if (!res.ok) throw new Error("Ошибка загрузки постов");
+  return res.json();
+};
+
+export const getPostById = async (id) => {
+  const res = await fetch(`${API_URL}/${id}`);
+  if (!res.ok) return null;
+  return res.json();
 };
 
 export const addPost = async (post) => {
-  const posts = JSON.parse(localStorage.getItem("blog_posts") || "[]");
-  posts.push(post);
-  localStorage.setItem("blog_posts", JSON.stringify(posts));
-  return post;
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(post),
+  });
+  return res.json();
 };
 
-export const updatePost = async (updatedPost) => {
-  const posts = JSON.parse(localStorage.getItem("blog_posts") || "[]");
-  const newPosts = posts.map((p) => (p.id === updatedPost.id ? updatedPost : p));
-  localStorage.setItem("blog_posts", JSON.stringify(newPosts));
-  return updatedPost;
+export const updatePost = async (post) => {
+  const res = await fetch(`${API_URL}/${post.id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(post),
+  });
+  return res.json();
 };
 
 export const deletePost = async (id) => {
-  const posts = JSON.parse(localStorage.getItem("blog_posts") || "[]");
-  const newPosts = posts.filter((p) => p.id !== id);
-  localStorage.setItem("blog_posts", JSON.stringify(newPosts));
-  return true;
+  const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+  return res.ok;
 };
 
 export const likePost = async (postId, userId) => {
-  const posts = JSON.parse(localStorage.getItem("blog_posts") || "[]");
-  const newPosts = posts.map((post) => {
-    if (post.id === postId) {
-      if (!post.likedBy) post.likedBy = [];
-      if (!post.likedBy.includes(userId)) {
-        post.likedBy.push(userId);
-        post.likes = (post.likes || 0) + 1;
-      }
-    }
-    return post;
-  });
-  localStorage.setItem("blog_posts", JSON.stringify(newPosts));
-  return newPosts.find((p) => p.id === postId);
+  const post = await getPostById(postId);
+  if (!post.likedBy) post.likedBy = [];
+  if (!post.likedBy.includes(userId)) {
+    post.likedBy.push(userId);
+    post.likes = (post.likes || 0) + 1;
+    await updatePost(post);
+  }
+  return post;
 };
